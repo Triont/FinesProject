@@ -24,7 +24,8 @@ namespace Project5
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddScoped<PersonService>();
+            services.AddScoped<PersonRepo>();
+            services.AddTransient<PersonService>();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

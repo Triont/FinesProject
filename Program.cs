@@ -13,7 +13,7 @@ namespace Project5
     {
         public static void Main(string[] args)
         {
-            itCreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

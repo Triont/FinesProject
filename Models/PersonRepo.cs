@@ -10,7 +10,7 @@ namespace Project5.Services
 {
     public class PersonRepo
     {
-        public IQueryable<Person> People { get; set; } = Database_FinesContext.People;
+        public IQueryable<Person> People { get; set; } = Database_FinesContext?.People;
         static Database_FinesContext Database_FinesContext { get; set; }
 
         public Database_FinesContext Database;
