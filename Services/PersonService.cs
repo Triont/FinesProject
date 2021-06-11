@@ -9,11 +9,41 @@ namespace Project5.Services
 {
     public class PersonService
     {
-        public readonly PersonRepo person;
+         readonly PersonRepo person;
         public PersonService(PersonRepo person)
         {
             this.person = person;
             
+        }
+        public IQueryable<Person> GetPersonRepo()
+        {
+          
+            return person.People;
+        }
+        public  PersonRepo GetRepo()
+        {
+            return this.person;
+        }
+        public async Task<List<Person>> GetAll()
+        {
+            return await this.person.GetPeopleAsync();
+        }
+
+        public async Task CreatePerson(Person person)
+        {
+            await this.person.CreatePerson(person);
+        }
+        public async Task<Person>  Get(long id)
+        {
+           return await this.person.GetPerson(id);
+        }
+        public async Task Edit(Person person)
+        {
+            await this.person.Edit(person);
+        }
+        public async Task Delete(Person person)
+        {
+            await this.person.DeletePerson(person);
         }
         
 

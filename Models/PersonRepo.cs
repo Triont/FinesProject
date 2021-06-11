@@ -14,9 +14,9 @@ namespace Project5.Services
         static Database_FinesContext Database_FinesContext { get; set; }
 
         public Database_FinesContext Database;
-        public PersonRepo(Database_FinesContext database_FinesContext)
+        public PersonRepo(Database_FinesContext databaseFinesContext)
         {
-            Database = database_FinesContext;
+            Database = databaseFinesContext;
         }
        
         public async Task<Person> GetPerson(long id)

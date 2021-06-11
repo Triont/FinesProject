@@ -15,33 +15,33 @@ namespace Project5.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        private readonly Database_FinesContext database_FinesContext;
         private readonly PersonService personService;
-        public PersonsController(Database_FinesContext database_FinesContext, PersonService personService)
+        public PersonsController( PersonService personService)
         {
-            this.database_FinesContext = database_FinesContext;
+            
             this.personService = personService;
         }
         // GET: api/<PersonsController>
         [HttpGet]
         public async Task< Person[]> Get()
         {
-           if( (await database_FinesContext.People.ToListAsync()).Count==1)
-            {
-                 WriteData();
-            }
+           //if( (await database_FinesContext.People.ToListAsync()).Count==1)
+           // {
+           //      WriteData();
+           // }
 
-           var people=await database_FinesContext.People.ToListAsync();
+           //var people=await database_FinesContext.People.ToListAsync();
 
-          var serviceResult=await  personService.person.GetPeopleAsync();
+            var serviceResult = await personService.GetRepo().GetPeopleAsync();
+            var serviceResultNew = await personService.GetAll();
             
 
-           var result= database_FinesContext.People.FromSqlRaw("SELECT * from Person");
+        //   var result= database_FinesContext.People.FromSqlRaw("SELECT * from Person");
           // var results = database_FinesContext.People.FromSqlRaw("SELECT *, (Select * from PersonCars Where PersonCars.PersonId=Person.Id ).Count() from Person    ");
-            var r =await result.ToListAsync();
+          //  var r =await result.ToListAsync();
 
             // var nnn = await results.ToListAsync();
-            return serviceResult.ToArray();
+            return serviceResultNew.ToArray();
           //  return r.ToArray();
       //      return new string[] { "value1", "value2" };
         }
@@ -71,8 +71,8 @@ namespace Project5.Controllers
             //     List<PersonCar> { new PersonCar() { Car = new Car() { Name = "Ford", Number = "23fsacb" } }
 
             // });
-            await database_FinesContext.People.AddAsync(person);
-            await database_FinesContext.SaveChangesAsync();
+            //await database_FinesContext.People.AddAsync(person);
+            //await database_FinesContext.SaveChangesAsync();
 
         }
 
