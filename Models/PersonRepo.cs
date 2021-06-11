@@ -42,5 +42,15 @@ namespace Project5.Services
         {
            return await Database.People.ToListAsync();
         }
+        public async Task<List<object>> GeAllPeopleAsync()
+        {
+            var tmp = await Database.People.ToListAsync();
+            for(int i=0;i<tmp.Count;i++)
+            {
+                Object f = (object)tmp; 
+
+               
+            }
+        }
     }
 }

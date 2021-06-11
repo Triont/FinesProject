@@ -32,8 +32,10 @@ namespace Project5.Controllers
 
            //var people=await database_FinesContext.People.ToListAsync();
 
-            var serviceResult = await personService.GetRepo().GetPeopleAsync();
+          
             var serviceResultNew = await personService.GetAll();
+            
+
             
 
         //   var result= database_FinesContext.People.FromSqlRaw("SELECT * from Person");
