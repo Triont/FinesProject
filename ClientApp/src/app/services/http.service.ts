@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { CreateComponent, Person } from '../create/create.component'
 @Injectable()
 export class HttpService {
 
@@ -29,8 +29,9 @@ export class HttpService {
 
   detetePersonById(id: number) {
     var url = this.baseUrl + 'api/Persons/';
-    var n_url = this.baseUrl + 'api/persons/'+id;
-    this.http.delete(n_url);
+    var n_url = this.baseUrl + 'api/persons/' + id;
+    // this.http.delete(n_url).subscribe(data => this.getPersonsDataFromServer());
+  return  this.http.delete(n_url);
   }
   getCarsDataFromServer() {
     return this.http.get(this.baseUrl + 'api/cars');
@@ -38,8 +39,8 @@ export class HttpService {
   getFinesDataFromServer() {
     return this.http.get(this.baseUrl + 'api/fines');
   }
-  postPerson(person: any) {
+  postPerson(person: Person) {
     var json = JSON.stringify(person);
-    return this.http.post(this.baseUrl + 'api/persons/', json);
+    return this.http.post(this.baseUrl + 'api/persons/', person);
   }
 }

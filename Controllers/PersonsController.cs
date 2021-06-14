@@ -108,10 +108,10 @@ namespace Project5.Controllers
         //}
 
         [HttpPost]
-        public async Task Post(string  json)
+        public async Task Post(Person  json)
         {
-           var tmp= JsonConvert.DeserializeObject<Person>(json);
-           await this.personService.CreatePerson(tmp);
+        //   var tmp= JsonConvert.DeserializeObject<Person>(json);
+           await this.personService.CreatePerson(json);
         }
 
         // PUT api/<PersonsController>/5

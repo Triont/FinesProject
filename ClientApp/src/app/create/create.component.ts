@@ -21,21 +21,24 @@ export class CreateComponent implements OnInit {
 
       //  this.http.getPersonsDataFromServer().subscribe((data: PersonData[]) => this.personsData = data);
   }
-  Create() {
-    this.http.postPerson(this.personData).subscribe((data: Person) => this.personData = data);
+  async Create() {
+    await this.http.postPerson(this.personData).subscribe((data: Person) => this.personData = data);
+
+    location.pathname = '/';
+
   }
 }
 
 interface PersonData {
   
     id: number;
-    name: string;
+    surname: string;
     city: string;
     address: string;
   //  PersonCars: any;
 }
 export class Person {
-  constructor(public id: number, public name: string, public city: string, public address: string) {
+  constructor(public id: number, public surname: string, public city: string, public address: string) {
 
   }
 }

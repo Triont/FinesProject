@@ -33,8 +33,12 @@ export class FetchDataComponent implements OnInit {
   }
   public deleteF() {
    // alert("Alert");
+
     this.http.deletePerson(this.lst);
-    
+    for (var i = 0; i < this.lst.length; i++) {
+      this.http.detetePersonById(this.lst[i]).subscribe(data => this.ngOnInit());
+    }
+ //   this.http.deletePerson(this.lst).subscribe(data => this.ngOnInit());
 
     console.log(this.personsData);
   }
