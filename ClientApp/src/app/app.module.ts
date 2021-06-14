@@ -9,13 +9,15 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { CreateComponent } from './create/create.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
+    CreateComponent,
+    FetchDataComponent,
 
-    FetchDataComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -25,6 +27,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
       { path: '', component: FetchDataComponent, pathMatch: 'full' },
     
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'create', component: CreateComponent }
     ])
   ],
   providers: [HttpService],

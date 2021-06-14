@@ -8,6 +8,7 @@ namespace Project5.Model
     public partial class Fine
     {
         public long Id { get; set; }
+        public bool IsActive { get; set; }
         public DateTime DateTmeOfAccident { get; set; }
         public decimal Value { get; set; }
         public long RegistratorId { get; set; }

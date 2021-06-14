@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Project5.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Project5.Models;
 using System.Threading.Tasks;
 using Project5.Services;
 
@@ -25,24 +28,34 @@ namespace Project5.Controllers
         [HttpGet]
         public async Task< Person[]> Get()
         {
-           //if( (await database_FinesContext.People.ToListAsync()).Count==1)
-           // {
-           //      WriteData();
-           // }
+            //if ((await database_FinesContext.People.ToListAsync()).Count == 2)
+            //{
+            //    WriteData();
+            //}
 
-           //var people=await database_FinesContext.People.ToListAsync();
+            //var people=await database_FinesContext.People.ToListAsync();
 
-          
-            var serviceResultNew = await personService.GetAll();
+
+         
+            //    await      personService.CreatePerson(new Person()
+            //{
+
+            //    Surname="NewName", Address="Some street", City="Kha", Id=3, PersonCars=new List<PersonCar>() { new PersonCar() { Car=new Car() { Name="Ford",
+            //    Number="13ffa3" }
+            //    } }
+            //});
             
+               var serviceResultNew = await personService.GetAll();
+            //var serviceResWithFines = await personService.GetAllPerson();
+            //var r = serviceResWithFines.ToList();
 
-            
 
-        //   var result= database_FinesContext.People.FromSqlRaw("SELECT * from Person");
-          // var results = database_FinesContext.People.FromSqlRaw("SELECT *, (Select * from PersonCars Where PersonCars.PersonId=Person.Id ).Count() from Person    ");
-          //  var r =await result.ToListAsync();
+            //   var result= database_FinesContext.People.FromSqlRaw("SELECT * from Person");
+            // var results = database_FinesContext.People.FromSqlRaw("SELECT *, (Select * from PersonCars Where PersonCars.PersonId=Person.Id ).Count() from Person    ");
+            //  var r =await result.ToListAsync();
 
             // var nnn = await results.ToListAsync();
+            //   return serviceResultNew.ToArray();
             return serviceResultNew.ToArray();
           //  return r.ToArray();
       //      return new string[] { "value1", "value2" };
@@ -86,11 +99,19 @@ namespace Project5.Controllers
         }
 
         // POST api/<PersonsController>
+        //[HttpPost]
+        //public void Post([FromBody] string value, int id)
+        //{
+
+            
+
+        //}
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task Post(string  json)
         {
-
-
+           var tmp= JsonConvert.DeserializeObject<Person>(json);
+           await this.personService.CreatePerson(tmp);
         }
 
         // PUT api/<PersonsController>/5
@@ -101,8 +122,9 @@ namespace Project5.Controllers
 
         // DELETE api/<PersonsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+           await personService.Delete(id);
         }
     }
 }

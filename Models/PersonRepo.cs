@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Project5.Model;
 using Microsoft.EntityFrameworkCore;
+using Project5.Models;
 
 
 namespace Project5.Services
@@ -33,6 +34,14 @@ namespace Project5.Services
             Database.People.Remove(person);
             await Database.SaveChangesAsync();
         }
+
+        public async Task DeletePerson(int id)
+        {
+           var toDelete=await Database.People.FirstOrDefaultAsync(i => i.Id == id);
+            Database.People.Remove(toDelete);
+            await Database.SaveChangesAsync();
+        }
+
         public async Task Edit(Person person)
         {
             Database.People.Update(person);
@@ -41,6 +50,22 @@ namespace Project5.Services
         public async Task<List<Person>> GetPeopleAsync()
         {
            return await Database.People.ToListAsync();
+        }
+        public async Task<IEnumerable<PersonDataOutput>> GetAllPersons()
+        {
+            var all = await GetPeopleAsync();
+            List<PersonDataOutput> outputs = new List<PersonDataOutput>();
+            for(int i=0;i<all.Count;i++)
+            {
+                PersonDataOutput personDataOutput = new PersonDataOutput();
+                personDataOutput.Person = all[i];
+                var count = all[i].Fines.Count;
+                personDataOutput.FineData = count.ToString();
+                outputs.Add(personDataOutput);
+                
+            }
+            return  outputs;
+          
         }
         public async Task<List<object>> GeAllPeopleAsync()
         {
@@ -51,6 +76,11 @@ namespace Project5.Services
 
                
             }
+            throw new NotImplementedException();
         }
+
+
+       
     }
+
 }
