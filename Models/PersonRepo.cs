@@ -20,10 +20,59 @@ namespace Project5.Services
             Database = databaseFinesContext;
         }
        
-        public async Task<Person> GetPerson(long id)
+        public async Task<PersonCarFineDataOutput> GetPerson(long id)
         {
-            var r= await Database.People.FirstOrDefaultAsync(i => i.Id == id);
-            return r;
+            var r= await Database.People.Include(a=>a.PersonCars).ThenInclude(f=>f.Car).FirstOrDefaultAsync(i => i.Id == id);
+           
+            var cars = new List<Car>();
+            var fines = new List<Fine>();
+            var _cars = await Database.Cars.ToListAsync();
+            var nFines = await Database.Fines.ToListAsync();
+
+            for (int i = 0; i < r.PersonCars.Count; i++)
+            {
+                cars.AddRange(await Database.Cars.Where(q => q.Id == r.PersonCars.ElementAt(i).CarId).ToListAsync());
+                fines.AddRange(await Database.Fines.Where(q => q.CarId == cars[i].Id).ToListAsync());
+
+            }
+            var arr = cars.ToArray();
+            var a = fines.ToArray();
+            //  ModelUpdate modelUpdate = new ModelUpdate() {
+            //      Cars = arr, Fines = a };
+            PersonCarFineDataOutput personCarFineDataOutput = new PersonCarFineDataOutput();
+            personCarFineDataOutput.Surname = r.Surname;
+            personCarFineDataOutput.Id = r.Id;
+            personCarFineDataOutput.City = r.City;
+            personCarFineDataOutput.Address = r.Address;
+            List<FineDataOutput> finesData = new List<FineDataOutput>();
+            for(int i=0;i<a.Length;i++)
+            {
+                FineDataOutput fineDataOutput = new FineDataOutput();
+                fineDataOutput.Value = a[i].Value;
+                fineDataOutput.IsActive = a[i].IsActive;
+                fineDataOutput.Id = a[i].Id;
+                fineDataOutput.CarId = a[i].CarId;
+                finesData.Add(fineDataOutput);
+            }
+            List<CarDataOutput> carDatas = new List<CarDataOutput>();
+
+            for(int i=0;i<arr.Length;i++)
+            {
+                CarDataOutput carDataOutput = new CarDataOutput();
+                carDataOutput.Id = arr[i].Id;
+                carDataOutput.Name = arr[i].Name;
+                carDataOutput.Number = arr[i].Number;
+                carDatas.Add(carDataOutput);
+               
+
+            }
+            personCarFineDataOutput.FineDatas = finesData.ToArray();
+            personCarFineDataOutput.CarData = carDatas.ToArray();
+
+
+            //  return r;
+            return personCarFineDataOutput;
+         //   return modelUpdate;
         
         }
         public async Task CreatePerson(Person person)
@@ -91,6 +140,7 @@ namespace Project5.Services
                                 {
                                     GerNumber="jfdsfj14"
                                 }
+                                ,Value=10 
                             }
                         },
                         Number="414aaf"
@@ -112,7 +162,7 @@ namespace Project5.Services
                                 {
                                     GerNumber="rg44rw"
                                 }
-                                ,
+                                ,Value=145.13M
                             }
                         },
                          Number="13fffa"
@@ -124,7 +174,13 @@ namespace Project5.Services
 
                     }
                    
-                });
+                }
+                
+                
+                
+                
+                
+                );
             }
             await Database.SaveChangesAsync();
             

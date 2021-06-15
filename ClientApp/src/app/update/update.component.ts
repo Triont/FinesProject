@@ -9,7 +9,7 @@ import { createConstructor } from 'typescript';
   templateUrl: './update.component.html'
 })
 export class UpdateComponent implements OnInit {
-  public person: Person = new Person(0, "", "", "", 0, 0);
+  public person: ModelUpdate = new ModelUpdate(0, "", "", "", [], []);
   public id: number;
 
   //constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
@@ -27,12 +27,12 @@ export class UpdateComponent implements OnInit {
     //  this.http.getPersonsDataFromServer().subscribe((data: PersonData[]) => this.personsData = data);
   }
    GetData(id) {
-     this.http.getPersonById(id).subscribe((data: Person) => this.person = data);
+     this.http.getPersonById(id).subscribe((data: ModelUpdate) => this.person = data);
    
 
   }
   SaveData() {
-    this.http.updatePerson(this.person).subscribe((data => this.http.getPersonsDataFromServer()));
+    this.http.updatePerson(this.person, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
     location.pathname = '/';
   }
 }
@@ -45,9 +45,22 @@ interface PersonData {
   address: string;
   //  PersonCars: any;
 }
-export class Person {
-  constructor(public id: number, public surname: string, public city: string, public address: string,
-    public carsCount: number, public finesCount: number) {
+export class ModelUpdate {
+  constructor( public id:number, public surname:string, public city:string, public address:string,public carData:Car[], public fineDatas:Fine[]) {
 
   }
+}
+
+export class Car {
+  id: number;
+  name: string;
+  number: string;
+}
+export class Fine {
+  id: number;
+  value: number;
+  carId: number;
+  isActive: boolean;
+  
+
 }

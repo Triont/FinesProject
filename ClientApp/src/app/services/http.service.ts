@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CreateComponent, Person } from '../create/create.component'
+import { ModelUpdate } from '../update/update.component'
 @Injectable()
 export class HttpService {
 
@@ -44,8 +45,8 @@ export class HttpService {
     return this.http.post(this.baseUrl + 'api/persons/', person);
   }
 
-  updatePerson(person: Person) {
-    return this.http.put(this.baseUrl + 'api/persons/' + person.id, person);
+  updatePerson(person: ModelUpdate, id: number) {
+    return this.http.put(this.baseUrl + 'api/persons/' + id, person);
   }
 
   getPersonById(id: number) {

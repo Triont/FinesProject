@@ -93,13 +93,14 @@ namespace Project5.Controllers
 
         // GET api/<PersonsController>/5
         [HttpGet("{id}")]
-        public async Task<Person> Get(int id)
+        public async Task<PersonCarFineDataOutput> Get(int id)
         {
 
             var person =await this.personService.Get(id);
             return person;
 
 
+        
         }
 
         // POST api/<PersonsController>

@@ -39,7 +39,7 @@ namespace Project5.Services
         {
             await this.person.CreatePerson(person);
         }
-        public async Task<Person>  Get(long id)
+        public async Task<PersonCarFineDataOutput>  Get(long id)
         {
            return await this.person.GetPerson(id);
         }

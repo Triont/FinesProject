@@ -18,4 +18,31 @@ namespace Project5.Models
       public string CarData { get; set; }
        
     }
+    public class PersonCarFineDataOutput
+    {
+        public long Id { get; set; }
+        public string Surname { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+      
+      
+       
+        public CarDataOutput[] CarData { get; set; }
+        public FineDataOutput[] FineDatas { get; set; }
+    }
+    public class CarDataOutput
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Number { get; set; }
+      //  public long DriverId { get; set; }
+    }
+    public class FineDataOutput
+    {
+        public long Id { get; set; }
+        public decimal Value { get; set; }
+
+        public long? CarId { get; set; }
+        public bool IsActive { get; set; }
+    }
 }
