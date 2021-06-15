@@ -8,7 +8,7 @@ import { Router} from '@angular/router'
   templateUrl: './fetch-data.component.html'
 })
 export class FetchDataComponent implements OnInit {
-  public personsData: Person[];
+  public personsData: PersonDataOutput[];
   public lst: number[]  = new Array();
   public Checked: boolean[];
   //constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
@@ -19,9 +19,9 @@ export class FetchDataComponent implements OnInit {
     constructor(private http: HttpService) {
 
     }
-    ngOnInit(): void {
+   async ngOnInit() {
 
-      this.http.getPersonsDataFromServer().subscribe((data: Person[]) => this.personsData = data);
+   await   this.http.getPersonsDataFromServer().subscribe((data: PersonDataOutput[]) => this.personsData = data);
       console.log(this.personsData);
 
       
@@ -30,6 +30,12 @@ export class FetchDataComponent implements OnInit {
   }
   public New() {
 
+  }
+
+  update() {
+    
+    location.pathname = '/update';
+    
   }
   public deleteF() {
    // alert("Alert");
@@ -76,9 +82,12 @@ interface PersonData {
  // carsdata: string;
   //  PersonCars: any;
 }
-interface Person {
+interface PersonDataOutput {
   id: number;
-  name: string;
+  surname: string;
   city: string;
   address: string;
+  fineData: string;
+  carData: string;
+
 }

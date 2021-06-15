@@ -26,7 +26,7 @@ namespace Project5.Controllers
         }
         // GET: api/<PersonsController>
         [HttpGet]
-        public async Task< Person[]> Get()
+        public async Task< PersonDataOutput[]> Get()
         {
             //if ((await database_FinesContext.People.ToListAsync()).Count == 2)
             //{
@@ -45,8 +45,8 @@ namespace Project5.Controllers
             //    } }
             //});
             
-               var serviceResultNew = await personService.GetAll();
-            //var serviceResWithFines = await personService.GetAllPerson();
+           //    var serviceResultNew = await personService.GetAll();
+            var serviceResWithFines = await personService.GetAllPerson();
             //var r = serviceResWithFines.ToList();
 
 
@@ -56,7 +56,7 @@ namespace Project5.Controllers
 
             // var nnn = await results.ToListAsync();
             //   return serviceResultNew.ToArray();
-            return serviceResultNew.ToArray();
+            return serviceResWithFines.ToArray();
           //  return r.ToArray();
       //      return new string[] { "value1", "value2" };
         }
@@ -93,9 +93,13 @@ namespace Project5.Controllers
 
         // GET api/<PersonsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<Person> Get(int id)
         {
-            return "value";
+
+            var person =await this.personService.Get(id);
+            return person;
+
+
         }
 
         // POST api/<PersonsController>
@@ -116,8 +120,9 @@ namespace Project5.Controllers
 
         // PUT api/<PersonsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task Put(long id, [FromBody] PersonUpdateData person)
         {
+            await this.personService.Edit(person);
         }
 
         // DELETE api/<PersonsController>/5

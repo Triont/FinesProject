@@ -47,6 +47,10 @@ namespace Project5.Services
         {
             await this.person.Edit(person);
         }
+        public async Task Edit(PersonUpdateData person)
+        {
+            await this.person.Edit(person);
+        }
         public async Task Delete(Person person)
         {
             await this.person.DeletePerson(person);

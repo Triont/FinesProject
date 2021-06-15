@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 
 #nullable disable
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project5.Model
 {
     public partial class Fine
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, Column(Order = 0)]
         public long Id { get; set; }
         public bool IsActive { get; set; }
         public DateTime DateTmeOfAccident { get; set; }

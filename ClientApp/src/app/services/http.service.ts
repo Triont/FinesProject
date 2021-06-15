@@ -43,4 +43,12 @@ export class HttpService {
     var json = JSON.stringify(person);
     return this.http.post(this.baseUrl + 'api/persons/', person);
   }
+
+  updatePerson(person: Person) {
+    return this.http.put(this.baseUrl + 'api/persons/' + person.id, person);
+  }
+
+  getPersonById(id: number) {
+    return this.http.get(this.baseUrl + 'api/persons/' + id);
+  }
 }

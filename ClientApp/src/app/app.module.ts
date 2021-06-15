@@ -10,12 +10,14 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CreateComponent } from './create/create.component'
+import { UpdateComponent } from './update/update.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     CreateComponent,
+    UpdateComponent,
     FetchDataComponent,
 
   ],
@@ -27,7 +29,8 @@ import { CreateComponent } from './create/create.component'
       { path: '', component: FetchDataComponent, pathMatch: 'full' },
     
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'create', component: CreateComponent }
+      { path: 'create', component: CreateComponent },
+      { path: 'update/:id', component: UpdateComponent }
     ])
   ],
   providers: [HttpService],

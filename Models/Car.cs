@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 
 #nullable disable
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project5.Model
 {
@@ -13,6 +15,8 @@ namespace Project5.Model
             PersonCars = new HashSet<PersonCar>();
         }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, Column(Order = 0)]
         public long Id { get; set; }
         public string Name { get; set; }
         public string Number { get; set; }

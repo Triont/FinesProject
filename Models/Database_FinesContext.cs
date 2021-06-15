@@ -40,7 +40,7 @@ namespace Project5.Model
             {
                 entity.ToTable("Car");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -57,7 +57,7 @@ namespace Project5.Model
             {
                 entity.ToTable("Fine");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.DateTmeOfAccident).HasColumnType("datetime");
 
@@ -84,7 +84,7 @@ namespace Project5.Model
             {
                 entity.ToTable("Person");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -127,7 +127,7 @@ namespace Project5.Model
             {
                 entity.ToTable("Registrator");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.GerNumber)
                     .IsRequired()

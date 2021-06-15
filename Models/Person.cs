@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace Project5.Model
 {
+
     public partial class Person
     {
         public Person()
@@ -14,6 +17,9 @@ namespace Project5.Model
             Registrators = new HashSet<Registrator>();
         }
 
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, Column(Order = 0)]
         public long Id { get; set; }
         public string Surname { get; set; }
         public string City { get; set; }
