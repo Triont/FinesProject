@@ -60,7 +60,10 @@ namespace Project5.Services
         {
             await this.person.DeletePerson(id);
         }
-        
+        public async Task AddCar(long id, CarDataInput car)
+        {
+            await this.person.AddCar(id, car);
+        }
 
     }
 }

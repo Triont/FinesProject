@@ -1,7 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CreateComponent, Person } from '../create/create.component'
+import { CreateCarComponent, CarDataInput } from '../create-car/create-car.component'
 import { ModelUpdate } from '../update/update.component'
+import { FineDataInput } from '../create-fine/create-fine.component';
 @Injectable()
 export class HttpService {
 
@@ -52,4 +54,19 @@ export class HttpService {
   getPersonById(id: number) {
     return this.http.get(this.baseUrl + 'api/persons/' + id);
   }
+  addCarToPerson(car: CarDataInput, id: number) {
+    return this.http.post(this.baseUrl + 'api/cars/' + id, car);
+  }
+  putCarToPerson(car: CarDataInput, id: number) {
+    return this.http.put(this.baseUrl + 'api/cars/' + id, car);
+  }
+  
+  addFineToPerson(fine: FineDataInput, id: number) {
+    return this.http.post(this.baseUrl + 'api/fines' + id, fine);
+  }
+  addFinwToCar(fine: FineDataInput, id: number) {
+    return this.http.post(this.baseUrl + 'api/fines' + id, fine);
+  }
+
+  
 }

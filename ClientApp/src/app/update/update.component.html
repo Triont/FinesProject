@@ -28,6 +28,7 @@
       <th>Id</th>
       <th>Name</th>
       <th>Number</th>
+      <th>Action</th>
 
 
     </tr>
@@ -37,7 +38,9 @@
       <td>{{ pCars.id }}</td>
       <td>{{ pCars.name }}</td>
       <td>{{ pCars.number}}</td>
-
+      <td><button (click)="Remove(pCars.id)">Remove Car</button>
+          <button (click)="ChangeOwner(pCars.id)">Change owner</button>
+      </td>
       <!--<td>{{persons.finedata}}</td>-->
 
 
@@ -45,8 +48,11 @@
     </tr>
   </tbody>
 </table>
+<button (click)="AddCar()">Add car</button>
 <br />
 <br />
+
+
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="person">
   <thead>

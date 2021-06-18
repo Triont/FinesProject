@@ -1,0 +1,17 @@
+<div>
+  <div>
+    <label>Fine's value'</label>
+    <input type="number" [(ngModel)]="fineData.value" />
+
+
+  </div>
+  <div>
+    <label>Number of car</label>
+    <input type="text" [(ngModel)]="fineData.carNumber" />
+  </div>
+  <div>
+    <label>Date of accident</label>
+    <input type="date" [(ngModel)]="fineData.createdDate" />
+  </div>
+  <button (click)="Create()">Create</button>
+</div>

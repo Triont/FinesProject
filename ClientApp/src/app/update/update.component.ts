@@ -35,6 +35,12 @@ export class UpdateComponent implements OnInit {
     this.http.updatePerson(this.person, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
     location.pathname = '/';
   }
+  AddCar() {
+    location.pathname = '/create-car/' + this.id;
+  }
+  ChangeOwner(id: number) {
+    location.pathname = '/car-changeowner/' + id;
+  }
 }
 
 interface PersonData {

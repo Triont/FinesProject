@@ -250,6 +250,40 @@ namespace Project5.Services
 
         }
 
+        public async Task AddCar(long id, CarDataInput car)
+        {
+           //var _p = await Database.People.Include(a => ();            
+            var person = await Database.People.Include(a=>a.PersonCars).Include(q=>q.Fines).FirstOrDefaultAsync(i => i.Id == id);
+            if (person != null)
+            {
+                person.PersonCars.Add(new PersonCar()
+                {
+                    Car = new Car() { Name = car.name, Number = car.number },
+                    DateFrom = car.date,
+                    DateTo = car.date.AddDays(3650)
+                }
+
+                    ) ;
+            }
+            Database.People.Update(person);
+           await Database.SaveChangesAsync();
+        }
+
+        public async Task ChangeOwner(long id, ChangeCarOwnerViewOwner changeCarOwnerViewOwner)
+        {
+                var car=await  Database.Cars.FirstOrDefaultAsync(i => i.Id == id);
+
+           var people=await  Database.People.ToListAsync();
+            Person person = new Person();
+            for(int i=0; i<people.Count;i++)
+            {
+             if(  people[i].PersonCars.FirstOrDefault(a => a.Car == car)!=null)
+                {
+                    person = people[i];
+                }
+            }
+        }
+
 
        
     }

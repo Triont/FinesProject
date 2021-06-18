@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using Project5.Model;
 using Microsoft.EntityFrameworkCore;
+using Project5.Models;
+using Project5.Services;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,9 +18,12 @@ namespace Project5.Controllers
     {
 
         private readonly Database_FinesContext db_context;
-        public CarsController(Database_FinesContext database_FinesContext)
+
+        private readonly PersonService personService;
+        public CarsController(Database_FinesContext database_FinesContext, PersonService personService)
         {
             this.db_context = database_FinesContext;
+            this.personService = personService;
         }
         // GET: api/<CarsController>
         [HttpGet]
@@ -36,7 +41,7 @@ namespace Project5.Controllers
 
         public async Task<Car[]> Get(long id)
         {
-          var result=await  db_context.PersonCars.Where(i => i.PersonId == id).ToListAsync();
+            var result = await db_context.PersonCars.Where(i => i.PersonId == id).ToListAsync();
             var _res = new List<Car>();
             for (int i = 0; i < result.Count; i++)
             {
@@ -47,15 +52,22 @@ namespace Project5.Controllers
         }
 
         // POST api/<CarsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{id}")]
+        public async Task Post(long id, CarDataInput value)
         {
+
+
+
+
+            await personService.AddCar(id, value);
+
         }
 
         // PUT api/<CarsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task Put(long id, [FromBody] CarDataInput value)
         {
+            await personService.AddCar(id, value);
         }
 
         // DELETE api/<CarsController>/5
