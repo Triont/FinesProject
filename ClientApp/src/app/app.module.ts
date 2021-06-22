@@ -12,6 +12,9 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CreateComponent } from './create/create.component'
 import { UpdateComponent } from './update/update.component';
 import { CreateCarComponent } from './create-car/create-car.component';
+import { ChangeCarOwnerComponent } from './car-changeowner/car-changeowner.component'
+import { FineCreateComponent } from './create-fine/create-fine.component'
+import { CarGetComponent} from './cars-show/cars-show.component'
 
 @NgModule({
   declarations: [
@@ -21,6 +24,11 @@ import { CreateCarComponent } from './create-car/create-car.component';
     CreateComponent,
     UpdateComponent,
     FetchDataComponent,
+    ChangeCarOwnerComponent,
+    FineCreateComponent,
+    CarGetComponent
+   
+    
 
   ],
   imports: [
@@ -33,7 +41,15 @@ import { CreateCarComponent } from './create-car/create-car.component';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'create', component: CreateComponent },
       { path: 'update/:id', component: UpdateComponent },
-      { path: 'create-car/:id', component: CreateCarComponent }
+      { path: 'create-car/:id', component: CreateCarComponent },
+      { path: 'car-changeowner/:id', component: ChangeCarOwnerComponent },
+      { path: 'create-fine/:id', component: FineCreateComponent },
+      { path: 'cars', component: CarGetComponent }
+   
+     
+     
+    
+  
     ])
   ],
   providers: [HttpService],

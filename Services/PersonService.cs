@@ -66,8 +66,19 @@ namespace Project5.Services
         }
         public async Task AddFine(long id, FinePersonInputData fineInputData)
         {
-            
+            await this.person.AddFine(id, fineInputData);
 
         }
+        public async Task AddFine(long id, FineCarInputData fineCarInputData)
+        {
+            await this.person.AddFine(id, fineCarInputData);
+
+        }
+        public async Task ChangeOwner(long id, ChangeCarOwnerData changeCarOwnerViewOwner)
+        {
+            await this.person.ChangeOwner(id, changeCarOwnerViewOwner);
+        }
+
+       
     }
 }

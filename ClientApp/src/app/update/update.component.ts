@@ -41,6 +41,9 @@ export class UpdateComponent implements OnInit {
   ChangeOwner(id: number) {
     location.pathname = '/car-changeowner/' + id;
   }
+  AddFine() {
+    location.pathname = '/create-fine/' + this.id;
+  }
 }
 
 interface PersonData {
@@ -61,12 +64,15 @@ export class Car {
   id: number;
   name: string;
   number: string;
+  beginOwning: Date;
+  endOwning: Date;
 }
 export class Fine {
   id: number;
   value: number;
   carId: number;
   isActive: boolean;
+  number: string;
   
 
 }

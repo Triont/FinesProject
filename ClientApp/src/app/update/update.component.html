@@ -28,9 +28,9 @@
       <th>Id</th>
       <th>Name</th>
       <th>Number</th>
+      <th>Begin owning</th>
+      <th>End owning</th>
       <th>Action</th>
-
-
     </tr>
   </thead>
   <tbody>
@@ -38,6 +38,8 @@
       <td>{{ pCars.id }}</td>
       <td>{{ pCars.name }}</td>
       <td>{{ pCars.number}}</td>
+      <td>{{pCars.beginOwning}}</td>
+      <td>{{pCars.endOwning}}</td>
       <td><button (click)="Remove(pCars.id)">Remove Car</button>
           <button (click)="ChangeOwner(pCars.id)">Change owner</button>
       </td>
@@ -62,7 +64,7 @@
       <th>Value</th>
       <th>IsActive</th>
       <th>CarId</th>
-
+      <th>Car number</th>
 
     </tr>
   </thead>
@@ -72,7 +74,7 @@
       <td>{{pFine.value}}</td>
       <td>{{ pFine.isActive }}</td>
       <td>{{ pFine.carId}}</td>
-
+      <td>{{pFine.number}}</td>
       <!--<td>{{persons.finedata}}</td>-->
 
 
@@ -80,6 +82,6 @@
     </tr>
   </tbody>
 </table>
-
+<button (click)="AddFine()">Add fine</button>
 
 <button (click)="SaveData()">Save</button>

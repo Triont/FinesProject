@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Project5.Models
 {
-    public class ChangeCarOwnerViewOwner
+    public class ChangeCarOwnerData
     {
 
         public long Id { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime Date { get; set; }
 
     }
 }

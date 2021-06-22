@@ -52,6 +52,13 @@ namespace Project5.Services
                 fineDataOutput.IsActive = a[i].IsActive;
                 fineDataOutput.Id = a[i].Id;
                 fineDataOutput.CarId = a[i].CarId;
+
+                var number = await Database.Cars.Where(q => q.Id == a[i].CarId).FirstOrDefaultAsync();
+                if(number!=null)
+                {
+                    fineDataOutput.Number = number.Number;
+                }
+                
                 finesData.Add(fineDataOutput);
             }
             List<CarDataOutput> carDatas = new List<CarDataOutput>();
@@ -62,6 +69,9 @@ namespace Project5.Services
                 carDataOutput.Id = arr[i].Id;
                 carDataOutput.Name = arr[i].Name;
                 carDataOutput.Number = arr[i].Number;
+                var ddd = await Database.PersonCars.Where(s => s.CarId == arr[i].Id).FirstOrDefaultAsync();
+                carDataOutput.BeginOwning = ddd.DateFrom;
+                carDataOutput.EndOwning = ddd.DateTo;
                 carDatas.Add(carDataOutput);
                
 
@@ -254,6 +264,7 @@ namespace Project5.Services
         {
            //var _p = await Database.People.Include(a => ();            
             var person = await Database.People.Include(a=>a.PersonCars).Include(q=>q.Fines).FirstOrDefaultAsync(i => i.Id == id);
+
             if (person != null)
             {
                 person.PersonCars.Add(new PersonCar()
@@ -269,36 +280,191 @@ namespace Project5.Services
            await Database.SaveChangesAsync();
         }
 
-        public async Task ChangeOwner(long id, ChangeCarOwnerViewOwner changeCarOwnerViewOwner)
+        public async Task ChangeOwner(long id, ChangeCarOwnerData changeCarOwnerViewOwner)
         {
-                var car=await  Database.Cars.FirstOrDefaultAsync(i => i.Id == id);
-
-           var people=await  Database.People.ToListAsync();
-            Person person = new Person();
-            for(int i=0; i<people.Count;i++)
+            var car = await Database.Cars.FirstOrDefaultAsync(i => i.Id == id);
+            var newOwner = await Database.People.FirstOrDefaultAsync(a => a.Id == changeCarOwnerViewOwner.Id);
+            var people = await Database.People.ToListAsync();
+            var person =  Database.PersonCars.Where(i => i.Car == car).Where(a => (a.DateFrom.CompareTo(DateTime.Now) <= 0) &&
+                 (a.DateTo.CompareTo(DateTime.Now) >= 0)).Select(x => x.Person);
+            var fPerson = await person.FirstOrDefaultAsync();
+           if((newOwner!=null) && (fPerson!=null) )
             {
-
-
-                for(int j=0;j<people[i].PersonCars.Count;j++)
+              
+                for(int i=0; i<fPerson.PersonCars.Count;i++)
                 {
-
-                }
-
-
-             if(  people[i].PersonCars.FirstOrDefault(a => a.Car == car)!=null)
-                {
+                    if(fPerson.PersonCars.ElementAt(i).Car==car)
+                    {
+                        fPerson.PersonCars.ElementAt(i).DateTo = changeCarOwnerViewOwner.Date;
+                        break;
+                    }
                   
-                    person = people[i];
                 }
+                //person.PersonCars.Where(a => a.Car == car).FirstOrDefault().DateTo = changeCarOwnerViewOwner.DateTime;
+                //newOwner.PersonCars.Where(a => a.Car == car).FirstOrDefault().DateFrom = changeCarOwnerViewOwner.DateTime.AddSeconds(100);
+                //newOwner.PersonCars.Where(a => a.Car == car).FirstOrDefault().DateTo = DateTime.Now.AddYears(10);
+              //   var p= person.PersonCars.Where(a => a.Car == car).FirstOrDefault();
+            
             }
+        //    Person person = new Person();
+        //    for (int i = 0; i < people.Count; i++)
+        //    {
+
+
+        //        for (int j = 0; j < people[i].PersonCars.Count; j++)
+        //        {
+        //            if ((people[i].PersonCars.ElementAt(j).DateFrom.CompareTo(DateTime.Now) <= 0) && (people[i].PersonCars.ElementAt(j).DateTo.CompareTo(DateTime.Now) >= 0))
+        //            {
+        //                if (people[i].PersonCars.ElementAt(j).Car.Id == id)
+        //                {
+        //                    person = people[i];
+
+        //                    if (newOwner != null)
+        //                    {
+        //                        person.PersonCars.ElementAt(j).DateTo = changeCarOwnerViewOwner.DateTime;
+        //                    }
+        //                    goto end;
+        //                }
+
+        //            }
+
+        //        }
+
+        //    }
+
+        //end:
+           
+            if (newOwner != null)
+            {
+                newOwner.PersonCars.Add(new PersonCar
+                {
+                    Car = car,
+                    CarId = car.Id,
+                    DateFrom = changeCarOwnerViewOwner.Date.AddMinutes(1),
+                    DateTo = DateTime.Now.AddYears(10),
+                    Person = newOwner,
+                    PersonId = newOwner.Id,
+                });
+            }
+            if ((fPerson != null) && (newOwner != null))
+            {
+                Database.People.Update(fPerson);
+                Database.People.Update(newOwner);
+            }
+            await Database.SaveChangesAsync();
+
+          
+
         }
 
         public async Task AddFine(long id, FinePersonInputData finePersonInputData)
         {
-            var person = await Database.People.FirstOrDefaultAsync(i => i.Id == id);
-            Fine fine = new Fine { };
+            var person = await Database.People.Include(w=>w.Fines).Include(a=>a.PersonCars).FirstOrDefaultAsync(i => i.Id == id);
+            var number = finePersonInputData.CarNumber;
+            var correctRegisterNumber = string.Empty;
+            var correctNumber = string.Empty;
+            if(finePersonInputData.NumberRegistrator.StartsWith('\t'))
+            {
+                finePersonInputData.NumberRegistrator.Remove(0, 1);
+            }
+            else
+            {
+                correctRegisterNumber = finePersonInputData.NumberRegistrator;
+            }
+            if(finePersonInputData.CarNumber.StartsWith('\t'))
+            {
+                correctNumber = finePersonInputData.CarNumber.Remove(0, 1);
+            }
+            else
+            {
+                correctNumber = finePersonInputData.CarNumber;
+            }
+         
+
+            var car = await Database.Cars.Where(i => i.Number == correctNumber).FirstOrDefaultAsync();
+            Registrator registrator = await Database.Registrators.FirstOrDefaultAsync(i => i.GerNumber == correctRegisterNumber);
+            if(registrator==null)
+            {
+                registrator = new Registrator { GerNumber = correctRegisterNumber};
+            }
+
+            Fine fine = new Fine {
+                Value = finePersonInputData.Value,
+                IsActive=true,
+                DateTmeOfAccident=finePersonInputData.Date,
+                Car=car,
+                 Driver=person,
+                 Registrator=registrator                               
+               
+            };
+            car.Fines.Add(fine);
+            Database.Update(car);
+            person.Fines.Add(fine);
+            Database.Update(person);
+            await Database.SaveChangesAsync();
+
+        }
+        public async Task RemoveCar(long carId)
+        {
+            var car = await Database.Cars.FirstOrDefaultAsync(i => i.Id == carId);
+            if(car!=null)
+            {
+                Database.Cars.Remove(car);
+                
+            }
+            await Database.SaveChangesAsync();
         }
 
+        public async Task ChangeOwnerCar(long PersonId, long CarId, ChangeCarOwnerData changeCarOwnerViewOwner)
+        {
+            var person = await Database.People.FirstOrDefaultAsync(i => i.Id == PersonId);
+            if(person!=null)
+            {
+                for(int i=0; i<person.PersonCars.Count;i++)
+                {
+                    if(person.PersonCars.ElementAt(i).Car.Id==CarId)
+                    {
+                        person.PersonCars.ElementAt(i).DateTo = changeCarOwnerViewOwner.Date;
+                        var newOwner = await Database.People.FirstOrDefaultAsync(a => a.Id == changeCarOwnerViewOwner.Id);
+                        if(newOwner!=null)
+                        {
+                          
+                        }
+                    }
+                }
+            }
+        }
+        public async Task AddFine(long id, FineCarInputData fineCarInputData)
+        {
+            var car = await Database.Cars.FirstOrDefaultAsync(i => i.Id == id);
+            var personCar = await Database.PersonCars.Where(i => i.Car == car).FirstOrDefaultAsync();
+            var registrator = await Database.Registrators.FirstOrDefaultAsync(i => i.GerNumber == fineCarInputData.CreatedBy);
+            if(registrator==null)
+            {
+                registrator = new Registrator()
+                {
+                    GerNumber = fineCarInputData.CreatedBy
+                };
+            }
+            Person owner = new Person();
+            if(personCar!=null)
+            {
+                owner = personCar.Person;
+            }
+            if(car!=null)
+            {
+                car.Fines.Add(new Fine
+                {
+
+                    IsActive=true, DateTmeOfAccident= fineCarInputData.DateTime, Value=fineCarInputData.Value, Driver=personCar?.Person,
+                    Registrator= registrator
+
+                });
+            }
+            Database.Cars.Update(car);
+            Database.People.Update(owner);
+            await Database.SaveChangesAsync();
+        }
 
        
     }

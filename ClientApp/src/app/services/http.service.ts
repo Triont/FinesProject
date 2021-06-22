@@ -4,6 +4,7 @@ import { CreateComponent, Person } from '../create/create.component'
 import { CreateCarComponent, CarDataInput } from '../create-car/create-car.component'
 import { ModelUpdate } from '../update/update.component'
 import { FineDataInput } from '../create-fine/create-fine.component';
+import { ChangeCarOwnerData } from '../car-changeowner/car-changeowner.component';
 @Injectable()
 export class HttpService {
 
@@ -55,17 +56,21 @@ export class HttpService {
     return this.http.get(this.baseUrl + 'api/persons/' + id);
   }
   addCarToPerson(car: CarDataInput, id: number) {
-    return this.http.post(this.baseUrl + 'api/cars/' + id, car);
+    return this.http.post(this.baseUrl + 'api/cars/CreateCar' + id, car);
   }
   putCarToPerson(car: CarDataInput, id: number) {
     return this.http.put(this.baseUrl + 'api/cars/' + id, car);
   }
   
   addFineToPerson(fine: FineDataInput, id: number) {
-    return this.http.post(this.baseUrl + 'api/fines' + id, fine);
+    return this.http.post(this.baseUrl + 'api/fines/' + id, fine);
   }
   addFineToCar(fine: FineDataInput, id: number) {
-    return this.http.post(this.baseUrl + 'api/fines' + id, fine);
+    return this.http.post(this.baseUrl + 'api/fines/' + id, fine);
+  }
+
+  changeOwner(id: number, changeOwnerData: ChangeCarOwnerData) {
+    return this.http.post(this.baseUrl + 'api/cars/'+id,changeOwnerData);
   }
 
   

@@ -24,12 +24,21 @@ namespace Project5.Controllers
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Post(long id, [FromBody] Fine fine)
+        public async Task<IActionResult> Post(long id, [FromBody] FinePersonInputData fine)
         {
-
+          await  this.personService.AddFine(id, fine);
             return Ok();
 
         }
+
+        //[HttpPost("{id}")]
+        //public async Task<IActionResult> Post(long id, [FromBody] FineCarInputData fine)
+        //{
+        //    await this.personService.AddFine(id, fine);
+        //    return Ok();
+
+        //}
+
 
     }
 }

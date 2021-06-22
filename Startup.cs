@@ -7,7 +7,9 @@ using Project5.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Project5.Controllers;
 using Project5.Model;
+using Microsoft.Extensions.Logging;
 
 namespace Project5
 {
@@ -26,6 +28,7 @@ namespace Project5
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
+            services.AddSingleton<Logger<CarsController>>();
             services.AddScoped<PersonRepo>();
             services.AddTransient<PersonService>();
             // In production, the Angular files will be served from this directory

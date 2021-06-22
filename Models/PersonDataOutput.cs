@@ -35,6 +35,9 @@ namespace Project5.Models
         public long Id { get; set; }
         public string Name { get; set; }
         public string Number { get; set; }
+
+        public DateTime BeginOwning { get; set; }
+        public DateTime EndOwning { get; set; }
       //  public long DriverId { get; set; }
     }
     public class FineDataOutput
@@ -44,5 +47,6 @@ namespace Project5.Models
 
         public long? CarId { get; set; }
         public bool IsActive { get; set; }
+        public string Number { get; set; }
     }
 }

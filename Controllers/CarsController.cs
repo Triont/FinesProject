@@ -7,6 +7,8 @@ using Project5.Models;
 using Project5.Services;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,16 +16,20 @@ namespace Project5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class CarsController : ControllerBase
     {
 
-        private readonly Database_FinesContext db_context;
+    
 
         private readonly PersonService personService;
-        public CarsController(Database_FinesContext database_FinesContext, PersonService personService)
+        private Logger<CarsController> logger;
+        public CarsController( PersonService personService, Logger<CarsController> logger)
         {
-            this.db_context = database_FinesContext;
+          
             this.personService = personService;
+            this.logger = logger;
+            this.logger.LogInformation("In constructor");
         }
         // GET: api/<CarsController>
         [HttpGet]
@@ -41,26 +47,33 @@ namespace Project5.Controllers
 
         public async Task<Car[]> Get(long id)
         {
-            var result = await db_context.PersonCars.Where(i => i.PersonId == id).ToListAsync();
-            var _res = new List<Car>();
-            for (int i = 0; i < result.Count; i++)
-            {
-                var cars = await db_context.Cars.Where(it => it.Id == result[i].CarId).ToListAsync();
-            }
-
+            //var result = await db_context.PersonCars.Where(i => i.PersonId == id).ToListAsync();
+            //var _res = new List<Car>();
+            //for (int i = 0; i < result.Count; i++)
+            //{
+            //    var cars = await db_context.Cars.Where(it => it.Id == result[i].CarId).ToListAsync();
+            //}
+            this.logger.LogInformation("In get method");
             throw new Exception();
         }
 
         // POST api/<CarsController>
+       // [HttpPost("CreateCar/{id}")]
+       //// [Route("createCar")]
+       // public async Task Post(long id, CarDataInput value)
+       // {
+
+
+
+
+       //     await personService.AddCar(id, value);
+
+       // }
         [HttpPost("{id}")]
-        public async Task Post(long id, CarDataInput value)
+        public async Task Post(long id, ChangeCarOwnerData changeCarOwnerViewOwner)
         {
-
-
-
-
-            await personService.AddCar(id, value);
-
+            this.logger.LogInformation("In post method");
+            await this.personService.ChangeOwner(id, changeCarOwnerViewOwner);
         }
 
         // PUT api/<CarsController>/5

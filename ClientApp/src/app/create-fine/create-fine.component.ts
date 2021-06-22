@@ -7,10 +7,10 @@ import { HttpService } from '../services/http.service'
   selector: 'app-finecreate',
   templateUrl: './create-fine.component.html'
 })
-export class CreateCarComponent implements OnInit {
+export class FineCreateComponent implements OnInit {
   public personData: Person = new Person(0, "", "", "");
   public carData: CarDataInput = new CarDataInput("", "", new Date());
-  public fineData: FineDataInput = new FineDataInput(0, "", new Date());
+  public fineData: FineDataInput = new FineDataInput(0, "", new Date(), "");
   public id: number;
   //constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
   //    http.get<string[]>(baseUrl + 'api/Persons').subscribe(result => {
@@ -27,8 +27,8 @@ export class CreateCarComponent implements OnInit {
   }
   async Create() {
     // await this.http.postPerson(this.personData).subscribe((data: Person) => this.personData = data);
-    await this.http.addCarToPerson(this.carData, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
-    await this.http.addFineToPerson(this.fineData, this.id);
+    //await this.http.addCarToPerson(this.carData, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
+    await this.http.addFineToPerson(this.fineData, this.id).subscribe((data) => this.http.getPersonsDataFromServer());
     location.pathname = '/';
 
   }
@@ -54,7 +54,7 @@ export class CarDataInput {
   }
 }
 export class FineDataInput {
-  constructor(public value: number, public carNumber: string, public createdDate: Date) {
+  constructor(public value: number, public number: string, public date: Date, public numberRegistrator:string) {
 
   }
 }

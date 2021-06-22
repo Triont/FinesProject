@@ -8,13 +8,15 @@ namespace Project5.Models
     public class FinePersonInputData
     {
         public decimal Value { get; set; }
-        public DateTime DateTime { get; set; }
-        public string Number { get; set; }
+        public DateTime Date { get; set; }
+        public string CarNumber { get; set; }
+        public string NumberRegistrator { get; set; }
     }
 
     public class FineCarInputData
     {
         public decimal Value { get; set; }
         public DateTime DateTime { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
