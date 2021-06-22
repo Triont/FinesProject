@@ -277,11 +277,26 @@ namespace Project5.Services
             Person person = new Person();
             for(int i=0; i<people.Count;i++)
             {
+
+
+                for(int j=0;j<people[i].PersonCars.Count;j++)
+                {
+
+                }
+
+
              if(  people[i].PersonCars.FirstOrDefault(a => a.Car == car)!=null)
                 {
+                  
                     person = people[i];
                 }
             }
+        }
+
+        public async Task AddFine(long id, FinePersonInputData finePersonInputData)
+        {
+            var person = await Database.People.FirstOrDefaultAsync(i => i.Id == id);
+            Fine fine = new Fine { };
         }
 
 

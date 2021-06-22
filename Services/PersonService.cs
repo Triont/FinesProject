@@ -64,6 +64,10 @@ namespace Project5.Services
         {
             await this.person.AddCar(id, car);
         }
+        public async Task AddFine(long id, FinePersonInputData fineInputData)
+        {
+            
 
+        }
     }
 }

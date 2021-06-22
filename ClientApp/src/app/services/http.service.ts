@@ -64,7 +64,7 @@ export class HttpService {
   addFineToPerson(fine: FineDataInput, id: number) {
     return this.http.post(this.baseUrl + 'api/fines' + id, fine);
   }
-  addFinwToCar(fine: FineDataInput, id: number) {
+  addFineToCar(fine: FineDataInput, id: number) {
     return this.http.post(this.baseUrl + 'api/fines' + id, fine);
   }
 
