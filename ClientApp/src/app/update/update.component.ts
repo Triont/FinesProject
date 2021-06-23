@@ -11,6 +11,7 @@ import { createConstructor } from 'typescript';
 export class UpdateComponent implements OnInit {
   public person: ModelUpdate = new ModelUpdate(0, "", "", "", [], []);
   public id: number;
+  public interval: any;
 
   //constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
   //    http.get<string[]>(baseUrl + 'api/Persons').subscribe(result => {
@@ -23,6 +24,9 @@ export class UpdateComponent implements OnInit {
   ngOnInit(): void {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.GetData(this.id);
+    this.interval = setInterval(() => {
+      this.GetData(this.id);
+    }, 1000);
 
     //  this.http.getPersonsDataFromServer().subscribe((data: PersonData[]) => this.personsData = data);
   }
@@ -43,6 +47,11 @@ export class UpdateComponent implements OnInit {
   }
   AddFine() {
     location.pathname = '/create-fine/' + this.id;
+  }
+
+  async CloseFine(id: number) {
+   await this.http.closeFine(id).subscribe((data) => this.http.getPersonsDataFromServer());
+    this.http.getPersonById(this.id).subscribe((data: ModelUpdate) => this.person = data);
   }
 }
 

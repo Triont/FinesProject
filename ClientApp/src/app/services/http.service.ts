@@ -72,6 +72,9 @@ export class HttpService {
   changeOwner(id: number, changeOwnerData: ChangeCarOwnerData) {
     return this.http.post(this.baseUrl + 'api/cars/'+id,changeOwnerData);
   }
+  closeFine(id: number) {
+    return this.http.put(this.baseUrl + 'api/fines/' + id, true);
+  }
 
   
 }

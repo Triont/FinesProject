@@ -4,8 +4,8 @@ import { HttpService } from '../services/http.service';
 import { Router} from '@angular/router'
 
 @Component({
-  selector: 'app-fetch-data',
-  templateUrl: './fetch-data.component.html'
+  selector: 'app-carsshow',
+  templateUrl: './cars-show.component.html'
 })
 export class CarGetComponent implements OnInit {
   public personsData: PersonDataOutput[];

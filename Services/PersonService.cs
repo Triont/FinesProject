@@ -79,6 +79,12 @@ namespace Project5.Services
             await this.person.ChangeOwner(id, changeCarOwnerViewOwner);
         }
 
+
+        public async Task Search(string value)
+        {
+          await  this.person.Search(value);
+        }
+
        
     }
 }

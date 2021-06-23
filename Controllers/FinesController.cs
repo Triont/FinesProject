@@ -17,16 +17,18 @@ namespace Project5.Controllers
     {
 
         private readonly PersonService personService;
+        private readonly FineService fineService;
 
-        public FinesController(PersonService personService)
+        public FinesController(PersonService personService, FineService fineService)
         {
             this.personService = personService;
+            this.fineService = fineService;
         }
 
         [HttpPost("{id}")]
         public async Task<IActionResult> Post(long id, [FromBody] FinePersonInputData fine)
         {
-          await  this.personService.AddFine(id, fine);
+            await this.personService.AddFine(id, fine);
             return Ok();
 
         }
@@ -38,6 +40,14 @@ namespace Project5.Controllers
         //    return Ok();
 
         //}
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(long id)
+        {
+
+            await this.fineService.CloseFine(id);
+            return Ok();
+        }
 
 
     }

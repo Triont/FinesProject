@@ -65,7 +65,7 @@
       <th>IsActive</th>
       <th>CarId</th>
       <th>Car number</th>
-
+      <th> Close</th>
     </tr>
   </thead>
   <tbody>
@@ -75,6 +75,7 @@
       <td>{{ pFine.isActive }}</td>
       <td>{{ pFine.carId}}</td>
       <td>{{pFine.number}}</td>
+      <td><button [disabled]="!pFine.isActive ? 'disabled': null"  (click)="CloseFine(pFine.id)">Close</button></td>
       <!--<td>{{persons.finedata}}</td>-->
 
 

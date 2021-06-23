@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Project5.Controllers;
 using Project5.Model;
 using Microsoft.Extensions.Logging;
+using Project5.Models;
 
 namespace Project5
 {
@@ -28,9 +29,13 @@ namespace Project5
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
-            services.AddSingleton<Logger<CarsController>>();
+            services.AddScoped<Logger<CarsController>>();
             services.AddScoped<PersonRepo>();
-            services.AddTransient<PersonService>();
+            services.AddScoped<CarRepo>();
+            services.AddScoped<CarService>();
+            services.AddScoped<PersonService>();
+            services.AddScoped<FineRepo>();
+            services.AddScoped<FineService>();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

@@ -23,19 +23,22 @@ namespace Project5.Controllers
     
 
         private readonly PersonService personService;
+        private readonly CarService carService;
         private Logger<CarsController> logger;
-        public CarsController( PersonService personService, Logger<CarsController> logger)
+        public CarsController( PersonService personService, Logger<CarsController> logger, CarService carService)
         {
           
             this.personService = personService;
             this.logger = logger;
+            this.carService = carService;
             this.logger.LogInformation("In constructor");
         }
         // GET: api/<CarsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<CarShowViewModel[]> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await this.carService.GetAll();
+            return result.ToArray();
         }
 
         // GET api/<CarsController>/5
