@@ -1,30 +1,36 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
-import { Router} from '@angular/router'
+import { Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-carsshow',
-  templateUrl: './cars-show.component.html'
+  selector: 'app-search-result',
+  templateUrl: './search-result.component.html'
 })
-export class CarGetComponent implements OnInit {
+export class SearchComponent implements OnInit {
   public personsData: PersonDataOutput[];
-  public carsData: CarShowViewModel[];
   public lst: number[]  = new Array();
   public Checked: boolean[];
+  public search: string;
+  public searchData: Search = new Search("");
   //constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
   //    http.get<string[]>(baseUrl + 'api/Persons').subscribe(result => {
   //    this.forecasts = result;
   //  }, error => console.error(error));
-    //  }
-    constructor(private http: HttpService) {
+  //  }
+  constructor(private http: HttpService, private route: ActivatedRoute) {
 
     }
-  async ngOnInit() {
-    await this.http.getCarsDataFromServer().subscribe((data: CarShowViewModel[]) => this.carsData = data);
-  
+   async ngOnInit() {
 
-      
+   
+     console.log(this.personsData);    
+     this.search = this.route.snapshot.paramMap.get('id');
+     this.searchData.data = this.route.snapshot.paramMap.get('id');
+     console.log(this.search);
+     await this.http.Search(this.searchData).subscribe((data: PersonDataOutput[]) => this.personsData = data);
+    //  await   this.http.getPersonsDataFromServer().subscribe((data: PersonDataOutput[]) => this.personsData = data);
      // this.Checked.length = this.personsData.length;
 
   }
@@ -68,6 +74,9 @@ export class CarGetComponent implements OnInit {
   CreateNew() {
     location.pathname = '/create';
   }
+  CarsInfo() {
+    location.pathname = '/cars';
+  }
 }
 
 interface PersonData {
@@ -91,10 +100,9 @@ interface PersonDataOutput {
   carData: string;
 
 }
-interface CarShowViewModel {
-  id: number;
-  name: string;
-  number: string;
-  ownerId: number;
-  fines: string;
+export class  Search {
+  
+  constructor(public data: string) {
+
+  }
 }

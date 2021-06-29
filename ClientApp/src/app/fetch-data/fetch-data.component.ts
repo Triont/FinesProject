@@ -68,6 +68,9 @@ export class FetchDataComponent implements OnInit {
   CreateNew() {
     location.pathname = '/create';
   }
+  CarsInfo() {
+    location.pathname = '/cars';
+  }
 }
 
 interface PersonData {

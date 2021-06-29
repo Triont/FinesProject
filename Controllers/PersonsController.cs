@@ -132,5 +132,11 @@ namespace Project5.Controllers
         {
            await personService.Delete(id);
         }
-    }
+        [HttpPost("search")]
+        public async Task<PersonDataOutput[]> Search(Search searchData)
+        {
+            var result = await this.personService.Search(searchData);
+            return result;
+        }
+   }
 }

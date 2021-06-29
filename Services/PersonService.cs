@@ -80,9 +80,9 @@ namespace Project5.Services
         }
 
 
-        public async Task Search(string value)
+        public async Task<PersonDataOutput[]> Search(Search value)
         {
-          await  this.person.Search(value);
+            return  await  this.person.Search(value);
         }
 
        

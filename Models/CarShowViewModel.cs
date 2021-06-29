@@ -11,5 +11,6 @@ namespace Project5.Models
         public string Name { get; set; }
         public string Number { get; set; }
         public string Fines { get; set; }
+        public long OwnerId { get; set; }
     }
 }

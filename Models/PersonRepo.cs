@@ -207,9 +207,9 @@ namespace Project5.Services
                 personDataOutput.Surname = all[i].Surname;
                 personDataOutput.City = all[i].City;
                 personDataOutput.Address = all[i].Address;
-                var count = all[i].Fines.Count();
+                var count = all[i].Fines.Count;
 
-                var allCarsCount = all[i].PersonCars.Count();
+                var allCarsCount = all[i].PersonCars.Count;
                 int currentCarCount = 0;
                 var finesCount = 0;
                 var activeFines = 0;
@@ -225,11 +225,45 @@ namespace Project5.Services
                     {
                         currentCarCount++;
                         var s = cars.FirstOrDefault(qq => qq.Id == all[i].PersonCars.ElementAt(j).CarId);
-                        finesCount += s.Fines.Count;
+                        for(int z=0; z<s.Fines.Count;z++)
+                        {
+                            var firstFinesCheck = DateTime.Compare(begin, s.Fines.ElementAt(z).DateTmeOfAccident);
+                            var sedondFinesCheck= DateTime.Compare(end, s.Fines.ElementAt(z).DateTmeOfAccident);
+                            if((firstFinesCheck<=0) &&(sedondFinesCheck>=0))
+                            {
+                                finesCount++;
+                                if(s.Fines.ElementAt(z).IsActive)
+                                {
+                                    activeFines++;
+                                }
+                            }
+                        }
+                      //  finesCount += s.Fines.Count;
                         // finesCount += all[i].PersonCars.ElementAt(j).Car.Fines.Count();
                         //activeFines+=all[i].PersonCars.ElementAt(j).Car.Fines.Where(q => q.IsActive).Count();
-                        activeFines += (s.Fines.Where(act => act.IsActive).Count());
+                        //activeFines += (s.Fines.Where(act => act.IsActive).Count());
                         //all[i].Fines=   all[i].Fines.Union(all[i].PersonCars.ElementAt(j).Car.Fines);
+                    }
+                    else
+                    {
+                        var carInfo = cars.FirstOrDefault(c => c.Id == all[i].PersonCars.ElementAt(j).CarId);
+                        carInfo.Fines.Select(a => a.DateTmeOfAccident);
+                        var finesCounts = all[i].Fines.Count;
+                        for (int abc = 0; abc < finesCounts; abc++)
+                        {
+                            var checkBegin = DateTime.Compare(all[i].PersonCars.ElementAt(j).DateFrom, all[i].Fines.ElementAt(abc).DateTmeOfAccident);
+                            var checkEnd = DateTime.Compare(all[i].PersonCars.ElementAt(j).DateTo, all[i].Fines.ElementAt(abc).DateTmeOfAccident);
+                            if((checkBegin<=0) &&(checkEnd>=0))
+                            {
+                                finesCount++;
+                                if(all[i].Fines.ElementAt(abc).IsActive)
+                                {
+                                    activeFines++;
+                                }
+                            }
+                                
+                                
+                        }
                     }
                 }
                 int activeCount = all[i].Fines.Where(i => i.IsActive).Count();
@@ -341,7 +375,7 @@ namespace Project5.Services
 
             if (newOwner != null)
             {
-                if (newOwner.PersonCars.Where(idNum => (idNum.CarId == car.Id) || (idNum.PersonId == newOwner.Id)).Count() == 0)
+                if (car!=null)
                 {
 
 
@@ -397,20 +431,23 @@ namespace Project5.Services
             {
                 registrator = new Registrator { GerNumber = correctRegisterNumber };
             }
-
-            Fine fine = new Fine
+            if (car != null)
             {
-                Value = finePersonInputData.Value,
-                IsActive = true,
-                DateTmeOfAccident = finePersonInputData.Date,
-                Car = car,
-                Driver = person,
-                Registrator = registrator
+                Fine fine = new()
+                {
+                    Value = finePersonInputData.Value,
+                    IsActive = true,
+                    DateTmeOfAccident = finePersonInputData.Date,
+                    Car = car,
+                    Driver = person,
+                    Registrator = registrator
 
-            };
-            car.Fines.Add(fine);
-            Database.Update(car);
-            person.Fines.Add(fine);
+                };
+                car.Fines.Add(fine);
+                Database.Update(car);  
+                person.Fines.Add(fine);
+            }
+          
             Database.Update(person);
             await Database.SaveChangesAsync();
 
@@ -479,21 +516,40 @@ namespace Project5.Services
             Database.People.Update(owner);
             await Database.SaveChangesAsync();
         }
-        public async Task<object> Search(string value)
+        public async Task<PersonDataOutput[]> Search(Search searchValue)
         {
-
+            var value = searchValue.Data;
             var persons = await Database.People.Where(a => a.Surname == value).ToListAsync();
-
+            _ = long.TryParse(value, out long idValue);
+            
+            var personsById = await Database.People.Where(i => i.Id == idValue).ToListAsync();
             var cars = await Database.Cars.Where(a => a.Number == value).ToListAsync();
             if (persons.Count != 0)
             {
-                return persons;
+                List<PersonDataOutput> personDataOutputs = new List<PersonDataOutput>();
+                for(int i=0;i<persons.Count;i++)
+                {
+                    personDataOutputs.Add(new PersonDataOutput
+                    {
+                        Id = persons[i].Id,
+                        City = persons[i].City,
+                        Address=persons[i].Address,
+                        Surname=persons[i].Surname
+
+                    }) ;
+                }
+                return personDataOutputs.ToArray();
 
             }
-            if (cars.Count != 0)
-            {
-                return cars;
-            }
+            //if(personsById.Count!=0)
+            //{
+            //    return personsById.ToArray();
+            //}
+                
+            //if (cars.Count != 0)
+            //{
+            //    return cars.ToArray();
+            //}
             return null;
 
         }

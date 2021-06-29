@@ -12,9 +12,10 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CreateComponent } from './create/create.component'
 import { UpdateComponent } from './update/update.component';
 import { CreateCarComponent } from './create-car/create-car.component';
-import { ChangeCarOwnerComponent } from './car-changeowner/car-changeowner.component'
-import { FineCreateComponent } from './create-fine/create-fine.component'
-import { CarGetComponent} from './cars-show/cars-show.component'
+import { ChangeCarOwnerComponent } from './car-changeowner/car-changeowner.component';
+import { FineCreateComponent } from './create-fine/create-fine.component';
+import { CarGetComponent } from './cars-show/cars-show.component';
+import { SearchComponent } from './search-result/search-result.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CarGetComponent} from './cars-show/cars-show.component'
     FetchDataComponent,
     ChangeCarOwnerComponent,
     FineCreateComponent,
-    CarGetComponent
+    CarGetComponent,
+    SearchComponent
    
     
 
@@ -37,14 +39,15 @@ import { CarGetComponent} from './cars-show/cars-show.component'
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: FetchDataComponent, pathMatch: 'full' },
-    
+
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'create', component: CreateComponent },
       { path: 'update/:id', component: UpdateComponent },
       { path: 'create-car/:id', component: CreateCarComponent },
       { path: 'car-changeowner/:id', component: ChangeCarOwnerComponent },
       { path: 'create-fine/:id', component: FineCreateComponent },
-      { path: 'cars', component: CarGetComponent }
+      { path: 'cars', component: CarGetComponent },
+      { path: 'search-result/:id', component: SearchComponent }
    
      
      

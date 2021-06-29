@@ -24,12 +24,23 @@ namespace Project5.Models
             {
                 var activeFines = cars[i].Fines.Where(x => x.IsActive == true).Count();
                 var allFines = cars[i].Fines.Count;
+                var personCar = await finesContext.PersonCars.Where(pp =>( pp.Car == cars[i])&&((pp.DateFrom.CompareTo(DateTime.Now)<=0) 
+                &&(pp.DateTo.CompareTo(DateTime.Now)>=0)
+                ) ).FirstOrDefaultAsync();
+                long ownerId = 0;
+                if(personCar!=null)
+                {
+                    ownerId = personCar.PersonId;
+                }
+               
                 CarShowViewModel carShowViewModel = new CarShowViewModel
                 {
                     Id = cars[i].Id,
                     Name = cars[i].Name,
                     Number = cars[i].Number,
-                    Fines=$"{activeFines}/{allFines}"
+                    Fines=$"{activeFines}/{allFines}",
+                    OwnerId=ownerId
+                    
                 };
             }
             return carShowViewModels;

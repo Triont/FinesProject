@@ -26,7 +26,7 @@ export class CreateCarComponent implements OnInit {
   }
   async Create() {
     // await this.http.postPerson(this.personData).subscribe((data: Person) => this.personData = data);
-    await this.http.addCarToPerson(this.carData, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
+    await this.http.putCarToPerson(this.carData, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
     location.pathname = '/';
 
   }

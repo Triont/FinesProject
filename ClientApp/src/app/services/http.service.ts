@@ -5,6 +5,7 @@ import { CreateCarComponent, CarDataInput } from '../create-car/create-car.compo
 import { ModelUpdate } from '../update/update.component'
 import { FineDataInput } from '../create-fine/create-fine.component';
 import { ChangeCarOwnerData } from '../car-changeowner/car-changeowner.component';
+import { Search } from '../search-result/search-result.component';
 @Injectable()
 export class HttpService {
 
@@ -74,6 +75,9 @@ export class HttpService {
   }
   closeFine(id: number) {
     return this.http.put(this.baseUrl + 'api/fines/' + id, true);
+  }
+  Search(data: Search) {
+    return this.http.post(this.baseUrl + 'api/persons/search/', data);
   }
 
   
