@@ -71,6 +71,9 @@ export class FetchDataComponent implements OnInit {
   CarsInfo() {
     location.pathname = '/cars';
   }
+  Sort(colName) {
+    this.personsData.sort((a, b) => a[colName] > b[colName] ? 1 : a[colName] < b[colName] ? -1 : 0)
+  }
 }
 
 interface PersonData {

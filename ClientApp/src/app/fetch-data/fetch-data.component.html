@@ -9,6 +9,7 @@
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="personsData">
   <thead>
     <tr>
+      <th class="tableHeader" *ngFor="let col of tableHeaders" (click)="sort(col.propertyName)"></th>
       <th>Id</th>
       <th>Surname</th>
       <th>City</th>
