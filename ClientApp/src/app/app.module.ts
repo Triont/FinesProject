@@ -16,6 +16,7 @@ import { ChangeCarOwnerComponent } from './car-changeowner/car-changeowner.compo
 import { FineCreateComponent } from './create-fine/create-fine.component';
 import { CarGetComponent } from './cars-show/cars-show.component';
 import { SearchComponent } from './search-result/search-result.component';
+import { CreateFineByCar } from './create-fine-by-car/create-fine-by-car.component'
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { SearchComponent } from './search-result/search-result.component';
     ChangeCarOwnerComponent,
     FineCreateComponent,
     CarGetComponent,
-    SearchComponent
+    SearchComponent,
+    CreateFineByCar
    
     
 
@@ -47,7 +49,8 @@ import { SearchComponent } from './search-result/search-result.component';
       { path: 'car-changeowner/:id', component: ChangeCarOwnerComponent },
       { path: 'create-fine/:id', component: FineCreateComponent },
       { path: 'cars', component: CarGetComponent },
-      { path: 'search-result/:id', component: SearchComponent }
+      { path: 'search-result/:id', component: SearchComponent },
+      { path: 'create-fine-by-car/:id', component: CreateFineByCar }
    
      
      

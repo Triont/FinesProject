@@ -1,0 +1,18 @@
+<div>
+  <div>
+    <label>Fine's value'</label>
+    <input type="number" [(ngModel)]="fine.value" />
+
+
+  </div>
+ 
+  <div>
+    <label>Date of accident</label>
+    <input type="date" [(ngModel)]="fine.dateTime" />
+  </div>
+  <div>
+    <label>Registation id </label>
+    <input type="text" [(ngModel)]="fine.numberRegistrator" />
+  </div>
+  <button (click)="Create()">Create</button>
+</div>

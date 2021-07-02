@@ -18,7 +18,7 @@ namespace Project5.Model
         public long RegistratorId { get; set; }
         public long? CarId { get; set; }
         public long? DriverId { get; set; }
-    
+        public bool IsPersonal { get; set; }
 
         public virtual Car Car { get; set; }
         public virtual Person Driver { get; set; }

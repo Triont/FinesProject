@@ -21,5 +21,13 @@ namespace Project5.Services
         {
            return  await this.car.GetAll();
         }
+        public async Task AddFine(long id, FinesInputViewModel finesInputViewModel)
+        {
+            await this.car.AddFine(id, finesInputViewModel);
+        }
+        public async Task<FineByCarInfo[]> GetInfo(long id)
+        {
+            return await this.car.GetFineInfo(id);
+        }
     }
 }

@@ -19,4 +19,14 @@ namespace Project5.Models
         public DateTime DateTime { get; set; }
         public string CreatedBy { get; set; }
     }
+    public class FinesInputViewModel
+    {
+        public bool IsPersonal { get; set; }
+        public decimal Value { get; set; }
+        public DateTime DateTime { get; set; }
+        public string NumberRegistrator { get; set; }
+        public string CarNumber { get; set; }
+
+
+    }
 }

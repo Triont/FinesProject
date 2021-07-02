@@ -32,6 +32,12 @@ namespace Project5.Controllers
             return Ok();
 
         }
+        [HttpPost("TestPost/{id}")]
+        public async Task<IActionResult> TestPost(long id, FinesInputViewModel finesInputViewModel)
+        {
+            await this.personService.AddFine(id, finesInputViewModel);
+            return Ok();
+        }
 
         //[HttpPost("{id}")]
         //public async Task<IActionResult> Post(long id, [FromBody] FineCarInputData fine)

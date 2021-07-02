@@ -9,8 +9,9 @@ namespace Project5.Models
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public string Number { get; set; }
-        public string Fines { get; set; }
+        public string Number { get; set; } 
         public long OwnerId { get; set; }
+        public string Fines { get; set; }
+       
     }
 }

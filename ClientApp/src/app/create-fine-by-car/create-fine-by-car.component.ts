@@ -1,16 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { HttpService } from '../services/http.service'
+import { HttpService } from '../services/http.service';
+import { FinesInputViewModel } from '../create-fine/create-fine.component';
 
 @Component({
-  selector: 'app-finecreate',
-  templateUrl: './create-fine.component.html'
+  selector: 'app-finebycarcreate',
+  templateUrl: './create-fine-by-car.component.html'
 })
-export class FineCreateComponent implements OnInit {
- 
-  public finesData: FinesInputViewModel = new FinesInputViewModel(true, 0, new Date(), "", "");
+export class CreateFineByCar implements OnInit {
+  public personData: Person = new Person(0, "", "", "");
+  public carData: CarDataInput = new CarDataInput("", "", new Date());
+  public fineData: FineDataInput = new FineDataInput(0, "", new Date(), "");
   public id: number;
+  public fine: FinesInputViewModel = new FinesInputViewModel(false, 0, new Date(), "", "");
   //constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
   //    http.get<string[]>(baseUrl + 'api/Persons').subscribe(result => {
   //    this.forecasts = result;
@@ -24,11 +27,10 @@ export class FineCreateComponent implements OnInit {
       
       //  this.http.getPersonsDataFromServer().subscribe((data: PersonData[]) => this.personsData = data);
   }
-   Create() {
+  async Create() {
     // await this.http.postPerson(this.personData).subscribe((data: Person) => this.personData = data);
     //await this.http.addCarToPerson(this.carData, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
-   // await this.http.addFineToPerson(this.fineData, this.id).subscribe((data) => this.http.getPersonsDataFromServer());
-     this.http.addFinesToPerson(this.finesData, this.id).subscribe((data) => this.http.getPersonsDataFromServer());
+    await this.http.addFineToPerson(this.fineData, this.id).subscribe((data) => this.http.getPersonsDataFromServer());
     location.pathname = '/';
 
   }
@@ -57,13 +59,5 @@ export class FineDataInput {
   constructor(public value: number, public number: string, public date: Date, public numberRegistrator:string) {
 
   }
-}
-export class FinesInputViewModel {
-  constructor(public isPersonal: boolean, public value: number, public dateTime: Date, public numberRegistrator: string,
-    public carNumber: string
-  ) {
-
-  }
-
   
 }

@@ -6,6 +6,7 @@ import { ModelUpdate } from '../update/update.component'
 import { FineDataInput } from '../create-fine/create-fine.component';
 import { ChangeCarOwnerData } from '../car-changeowner/car-changeowner.component';
 import { Search } from '../search-result/search-result.component';
+import { FinesInputViewModel } from '../create-fine/create-fine.component';
 @Injectable()
 export class HttpService {
 
@@ -66,8 +67,18 @@ export class HttpService {
   addFineToPerson(fine: FineDataInput, id: number) {
     return this.http.post(this.baseUrl + 'api/fines/' + id, fine);
   }
+  addFinesToPerson(fine: FinesInputViewModel, id:number) {
+    return this.http.post(this.baseUrl + 'api/fines/TestPost/' + id, fine);
+  }
   addFineToCar(fine: FineDataInput, id: number) {
     return this.http.post(this.baseUrl + 'api/fines/' + id, fine);
+  }
+
+  createFineByCar(fine: FinesInputViewModel, id: number) {
+    return this.http.post(this.baseUrl + 'api/cars/AddFine/' + id, fine);
+  }
+  getInfoByCar(id: number) {
+    return this.http.get(this.baseUrl + 'api/cars/GetInfo/' + id);
   }
 
   changeOwner(id: number, changeOwnerData: ChangeCarOwnerData) {

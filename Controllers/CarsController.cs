@@ -78,6 +78,16 @@ namespace Project5.Controllers
             this.logger.LogInformation("In post method");
             await this.personService.ChangeOwner(id, changeCarOwnerViewOwner);
         }
+        [HttpPost("AddFine/{id}")]
+        public async Task AddFine(long id, FinesInputViewModel finesInputViewModel)
+        {
+            await this.carService.AddFine(id, finesInputViewModel);
+        }
+        [HttpGet("GetInfo/{id}")]
+        public async Task<FineByCarInfo[]> GetInfo(long id)
+        {
+            return await this.carService.GetInfo(id);
+        }
 
         // PUT api/<CarsController>/5
         [HttpPut("{id}")]

@@ -225,20 +225,20 @@ namespace Project5.Services
                     {
                         currentCarCount++;
                         var s = cars.FirstOrDefault(qq => qq.Id == all[i].PersonCars.ElementAt(j).CarId);
-                        for(int z=0; z<s.Fines.Count;z++)
+                        for (int z = 0; z < s.Fines.Count; z++)
                         {
                             var firstFinesCheck = DateTime.Compare(begin, s.Fines.ElementAt(z).DateTmeOfAccident);
-                            var sedondFinesCheck= DateTime.Compare(end, s.Fines.ElementAt(z).DateTmeOfAccident);
-                            if((firstFinesCheck<=0) &&(sedondFinesCheck>=0))
+                            var sedondFinesCheck = DateTime.Compare(end, s.Fines.ElementAt(z).DateTmeOfAccident);
+                            if ((firstFinesCheck <= 0) && (sedondFinesCheck >= 0))
                             {
                                 finesCount++;
-                                if(s.Fines.ElementAt(z).IsActive)
+                                if (s.Fines.ElementAt(z).IsActive)
                                 {
                                     activeFines++;
                                 }
                             }
                         }
-                      //  finesCount += s.Fines.Count;
+                        //  finesCount += s.Fines.Count;
                         // finesCount += all[i].PersonCars.ElementAt(j).Car.Fines.Count();
                         //activeFines+=all[i].PersonCars.ElementAt(j).Car.Fines.Where(q => q.IsActive).Count();
                         //activeFines += (s.Fines.Where(act => act.IsActive).Count());
@@ -253,16 +253,16 @@ namespace Project5.Services
                         {
                             var checkBegin = DateTime.Compare(all[i].PersonCars.ElementAt(j).DateFrom, all[i].Fines.ElementAt(abc).DateTmeOfAccident);
                             var checkEnd = DateTime.Compare(all[i].PersonCars.ElementAt(j).DateTo, all[i].Fines.ElementAt(abc).DateTmeOfAccident);
-                            if((checkBegin<=0) &&(checkEnd>=0))
+                            if ((checkBegin <= 0) && (checkEnd >= 0))
                             {
                                 finesCount++;
-                                if(all[i].Fines.ElementAt(abc).IsActive)
+                                if (all[i].Fines.ElementAt(abc).IsActive)
                                 {
                                     activeFines++;
                                 }
                             }
-                                
-                                
+
+
                         }
                     }
                 }
@@ -317,16 +317,16 @@ namespace Project5.Services
         public async Task ChangeOwner(long id, ChangeCarOwnerData changeCarOwnerViewOwner)
         {
             var car = await Database.Cars.FirstOrDefaultAsync(i => i.Id == id);
-            var newOwner = await Database.People.Include(a=>a.PersonCars).Include(q=>q.Fines).FirstOrDefaultAsync(a => a.Id == changeCarOwnerViewOwner.Id);
+            var newOwner = await Database.People.Include(a => a.PersonCars).Include(q => q.Fines).FirstOrDefaultAsync(a => a.Id == changeCarOwnerViewOwner.Id);
             var people = await Database.People.ToListAsync();
             var person = Database.PersonCars.Where(i => i.Car == car).Where(a => (a.DateFrom.CompareTo(DateTime.Now) <= 0) &&
                 (a.DateTo.CompareTo(DateTime.Now) >= 0)).Select(x => x.Person);
-         
 
-           
+
+
 
             var fPerson = await person.FirstOrDefaultAsync();
-            var oldPerson =await   Database.People.Include(z => z.PersonCars).Include(a => a.Fines).FirstOrDefaultAsync(i => i.Id == fPerson.Id);
+            var oldPerson = await Database.People.Include(z => z.PersonCars).Include(a => a.Fines).FirstOrDefaultAsync(i => i.Id == fPerson.Id);
             if ((newOwner != null) && (oldPerson != null))
             {
 
@@ -375,7 +375,7 @@ namespace Project5.Services
 
             if (newOwner != null)
             {
-                if (car!=null)
+                if (car != null)
                 {
 
 
@@ -444,10 +444,10 @@ namespace Project5.Services
 
                 };
                 car.Fines.Add(fine);
-                Database.Update(car);  
+                Database.Update(car);
                 person.Fines.Add(fine);
             }
-          
+
             Database.Update(person);
             await Database.SaveChangesAsync();
 
@@ -519,37 +519,38 @@ namespace Project5.Services
         public async Task<PersonDataOutput[]> Search(Search searchValue)
         {
             var value = searchValue.Data;
-            var persons = await Database.People.Where(a => a.Surname.Contains(value)).Include(z=>z.Fines).ToListAsync();
+            var persons = await Database.People.Where(a => a.Surname.Contains(value)).Include(z => z.Fines).ToListAsync();
 
             _ = long.TryParse(value, out long idValue);
-            
+
             var personsById = await Database.People.Where(i => i.Id == idValue).ToListAsync();
             var cars = await Database.Cars.Where(a => a.Number == value).ToListAsync();
             if (persons.Count != 0)
             {
                 List<PersonDataOutput> personDataOutputs = new List<PersonDataOutput>();
-                for(int i=0;i<persons.Count;i++)
+                for (int i = 0; i < persons.Count; i++)
                 {
-                    var dataP =await GetPersonFineAndCarData(persons[i].Id);
+                    var dataP = await GetPersonFineAndCarData(persons[i].Id);
                     personDataOutputs.Add(new PersonDataOutput
                     {
                         Id = persons[i].Id,
                         City = persons[i].City,
-                        Address=persons[i].Address,
-                        Surname=persons[i].Surname,
-                        CarData=dataP.carData,
-                        FineData=dataP.fineData
+                        Address = persons[i].Address,
+                        Surname = persons[i].Surname,
+                        CarData = dataP.carData,
+                        FineData = dataP.fineData
 
-                    }) ;
+                    });
                 }
                 return personDataOutputs.ToArray();
 
             }
+
             //if(personsById.Count!=0)
             //{
             //    return personsById.ToArray();
             //}
-                
+
             //if (cars.Count != 0)
             //{
             //    return cars.ToArray();
@@ -557,7 +558,17 @@ namespace Project5.Services
             return null;
 
         }
-        public async Task<(string fineData,string carData)> GetPersonFineAndCarData(long id)
+        public async Task<Car[]> GetCars(string search)
+        {
+            var cars = await Database.Cars.Where(i => i.Number.Contains(search)).ToArrayAsync();
+            if (cars.Length == 0)
+            {
+                cars = await Database.Cars.Where(i => i.Name.Contains(search)).ToArrayAsync();
+            }
+            return cars;
+
+        }
+        public async Task<(string fineData, string carData)> GetPersonFineAndCarData(long id)
         {
             var person = await Database.People.Include(q => q.Fines).Include(s => s.PersonCars).FirstOrDefaultAsync(a => a.Id == id);
             var cars = await Database.Cars.Include(i => i.PersonCars).Include(a => a.Fines).ToListAsync();
@@ -571,7 +582,7 @@ namespace Project5.Services
             {
                 var begin = person.PersonCars.ElementAt(j).DateFrom;
                 var end = person.PersonCars.ElementAt(j).DateTo;
-                var fineInfo = await Database.Fines.Where(a => (DateTime.Compare(begin, a.DateTmeOfAccident) <= 0) && (DateTime.Compare(end, a.DateTmeOfAccident) >= 0) &&(a.Car.Id==person.PersonCars.ElementAt(j).CarId)).ToListAsync();
+                var fineInfo = await Database.Fines.Where(a => (DateTime.Compare(begin, a.DateTmeOfAccident) <= 0) && (DateTime.Compare(end, a.DateTmeOfAccident) >= 0) && (a.Car.Id == person.PersonCars.ElementAt(j).CarId)).ToListAsync();
 
                 var allFinesCount = fineInfo.Count;
                 var activeFinesCount = fineInfo.Where(cond => cond.IsActive).Count();
@@ -630,21 +641,21 @@ namespace Project5.Services
             string fineData = $"{activeFines}/{fines}";
             string carData = $"{currentCarCount}/{person.PersonCars.Count}";
             return await Task.FromResult((kekw, carData));
-           
+
 
         }
 
         public async Task<string> GetFines(long id)
         {
-            var person = await Database.People.Include(s=>s.PersonCars).Include(q=>q.Fines).FirstOrDefaultAsync(i => i.Id == id);
+            var person = await Database.People.Include(s => s.PersonCars).Include(q => q.Fines).FirstOrDefaultAsync(i => i.Id == id);
             var allFineCount = 0;
             var activeFineCount = 0;
 
             if (person != null)
             {
-                if(person.PersonCars!=null)
+                if (person.PersonCars != null)
                 {
-                    for(int i=0;i<person.PersonCars.Count;i++)
+                    for (int i = 0; i < person.PersonCars.Count; i++)
                     {
                         var fines = await Database.Fines.Where(a => (a.DateTmeOfAccident.CompareTo(person.PersonCars.ElementAt(i).DateFrom) >= 0)
                           && (a.DateTmeOfAccident.CompareTo(person.PersonCars.ElementAt(i).DateTo) <= 0)
@@ -654,19 +665,19 @@ namespace Project5.Services
                     }
                     return await Task.FromResult($"{activeFineCount}/{allFineCount}");
                 }
-            
-             //   person.PersonCars.Where(a => a.)
+
+                //   person.PersonCars.Where(a => a.)
             }
-             return null;
+            return null;
         }
         public async Task<Dictionary<long, string>> GetFineByCars()
 
         {
             var cars = await Database.Cars.ToListAsync();
             Dictionary<long, string> finesCarsId = new();
-            for(int i=0;i<cars?.Count;i++)
+            for (int i = 0; i < cars?.Count; i++)
             {
-                var fines =await Database.Fines.Where(f => f.CarId == cars[i].Id).ToListAsync();
+                var fines = await Database.Fines.Where(f => f.CarId == cars[i].Id).ToListAsync();
                 var allCount = fines.Count;
                 var activeFines = fines.Where(z => z.IsActive).Count();
                 finesCarsId.Add(cars[i].Id, $"{activeFines}/{allCount}");
@@ -677,36 +688,36 @@ namespace Project5.Services
         {
             string result = string.Empty;
             var car = await Database.Cars.Include(a => a.PersonCars).Include(f => f.Fines).Where(i => i.Id == id).FirstOrDefaultAsync();
-            if(car!=null)
+            if (car != null)
             {
                 var fines = await Database.Fines.Where(f => f.CarId == id).ToListAsync();
                 var allCount = fines.Count;
                 var activeFines = fines.Where(z => z.IsActive).Count();
-              result= $"{activeFines}/{allCount}";
+                result = $"{activeFines}/{allCount}";
 
             }
             return await Task.FromResult(result);
-            
+
         }
-        public async Task<List<FineCarInfo>> GetFineCarInfoById(long id )
+        public async Task<List<FineCarInfo>> GetFineCarInfoById(long id)
         {
             var car = await Database.Cars.Include(a => a.PersonCars).Include(f => f.Fines).Where(i => i.Id == id).FirstOrDefaultAsync();
-            List<FineCarInfo> res = new List<FineCarInfo>();
+            List<FineCarInfo> res = new();
             if (car != null)
             {
                 var fines = await Database.Fines.Where(a => a.CarId.Value == car.Id).ToListAsync();
-              
+
                 var peopleOwners = await Database.People.Where(p => p.PersonCars.Any(z => z.CarId == car.Id)).ToListAsync();
 
-             var driverIds=   fines.Select(s => s.DriverId).ToList();
+                var driverIds = fines.Select(s => s.DriverId).ToList();
                 var people = await Database.People.Where(ss => driverIds.Contains(ss.Id)).ToListAsync();
 
-                for(int i=0;i<people.Count;i++)
+                for (int i = 0; i < people.Count; i++)
                 {
-                   
 
-                        var finesBy = fines.Where(a => (a.DateTmeOfAccident.CompareTo(people[i].PersonCars.Where(q=>q.CarId==id).FirstOrDefault()?.DateFrom)) >= 0
-                   && (a.DateTmeOfAccident.CompareTo(people[i].PersonCars.Where(t=>t.CarId==id).FirstOrDefault()?.DateTo) <= 0));
+
+                    var finesBy = fines.Where(a => (a.DateTmeOfAccident.CompareTo(people[i].PersonCars.Where(q => q.CarId == id).FirstOrDefault()?.DateFrom)) >= 0
+               && (a.DateTmeOfAccident.CompareTo(people[i].PersonCars.Where(t => t.CarId == id).FirstOrDefault()?.DateTo) <= 0));
                     for (int f = 0; f < finesBy.Count(); f++)
                     {
 
@@ -714,10 +725,10 @@ namespace Project5.Services
                         {
                             City = people[i].City,
                             Name = people[i].Surname,
-                            DateTimeAccident=finesBy.ElementAt(f).DateTmeOfAccident,
-                            IsActive=finesBy.ElementAt(f).IsActive,
-                            Id=people[i].Id,
-                            Value=finesBy.ElementAt(f).Value
+                            DateTimeAccident = finesBy.ElementAt(f).DateTmeOfAccident,
+                            IsActive = finesBy.ElementAt(f).IsActive,
+                            Id = people[i].Id,
+                            Value = finesBy.ElementAt(f).Value
 
                         };
                         res.Add(fineCarInfo);
@@ -726,23 +737,248 @@ namespace Project5.Services
 
                 for (int i = 0; i < peopleOwners.Count; i++)
                 {
-                    for(int g=0;g<peopleOwners[i].PersonCars.Count;g++)
+                    for (int g = 0; g < peopleOwners[i].PersonCars.Count; g++)
                     {
 
                     }
-                   var finesBy= fines.Where(a => (a.DateTmeOfAccident.CompareTo(car.PersonCars.ElementAt(i).DateFrom)) >= 0
-                    && (a.DateTmeOfAccident.CompareTo(car.PersonCars.ElementAt(i).DateTo) <= 0));
-                    
-                       
+                    var finesBy = fines.Where(a => (a.DateTmeOfAccident.CompareTo(car.PersonCars.ElementAt(i).DateFrom)) >= 0
+                      && (a.DateTmeOfAccident.CompareTo(car.PersonCars.ElementAt(i).DateTo) <= 0));
+
+
                 }
-                
+
 
             }
 
             return res;
-            
+
         }
+        public async Task<FineCarInfo[]> GetCarFines(string number)
+        {
+            var car = await Database.Cars.FirstOrDefaultAsync(i => i.Number == number);
+            if (car != null)
+            {
+                return (await GetFineCarInfoById(car.Id)).ToArray();
+            }
+            return null;
+        }
+        public async Task AddFineByDriver(long id, FinePersonInputData finePersonInputData)
+        {
+            var person = await Database.People.Include(q => q.Fines).FirstOrDefaultAsync(a => a.Id == id);
+            if (person != null)
+            {
+
+                var car = await Database.Cars.Include(a => a.Fines).FirstOrDefaultAsync(z => z.Number == finePersonInputData.CarNumber);
+                if (car != null)
+                {
+
+                    var registratorInfo = await Database.Registrators.FirstOrDefaultAsync(s => s.GerNumber == finePersonInputData.NumberRegistrator);
+                    if (registratorInfo != null)
+                    {
+
+                        person.Fines?.Add(new Fine
+                        {
+
+                            Car = car,
+                            DateTmeOfAccident = finePersonInputData.Date,
+                            Driver = person,
+                            DriverId = person.Id,
+                            CarId = car.Id,
+                            Value = finePersonInputData.Value,
+                            IsActive = true,
+                            Registrator = registratorInfo,
+                            RegistratorId = registratorInfo.Id
+                        });
+                        Database.People.Update(person);
+                    }
+                }
+            }
+            await Database.SaveChangesAsync();
+        }
+        public async Task<object> CreateFine(long id, FinesInputViewModel finesInputViewModel)
+        {
+            if (finesInputViewModel != null)
+            {
+                var car = await Database.Cars.FirstOrDefaultAsync(c => c.Number == finesInputViewModel.CarNumber);
+                if (car == null)
+                {
+                    return null;
+                }
+                var registrator = await Database.Registrators.FirstOrDefaultAsync(r => r.GerNumber == finesInputViewModel.NumberRegistrator);
+                if (registrator == null)
+                {
+                    registrator = new Registrator
+                    {
+                        GerNumber = finesInputViewModel.NumberRegistrator,
+
+                    };
+                }
+                if (finesInputViewModel.IsPersonal)
+                {
+                    var person = await Database.People.Include(f => f.Fines).FirstOrDefaultAsync(a => a.Id == id);
+                    if (person == null)
+                    {
+                        return null;
+                    }
+                    if (person != null)
+                    {
+
+                        if (car != null)
+                        {
+
+                            if (registrator != null)
+                            {
+                                person.Fines.Add(new Fine
+                                {
+                                    DateTmeOfAccident = finesInputViewModel.DateTime,
+                                    Driver = person,
+                                    DriverId = person.Id,
+                                    Car = car,
+                                    CarId = car.Id,
+                                    IsActive = true,
+                                    IsPersonal = finesInputViewModel.IsPersonal,
+                                    Value = finesInputViewModel.Value,
+                                    Registrator = registrator,
+                                    RegistratorId = registrator.Id,
+
+                                });
+                                Database.People.Update(person);
+                            }
+                        }
+                    }
+                }
+                if (!finesInputViewModel.IsPersonal)
+                {
+                    var owner = await Database.People.Include(p => p.PersonCars).Include(f => f.Fines).Where(a => a.PersonCars
+                        .Any(q => q.CarId == car.Id) && a.PersonCars
+                         .Any(s => s.DateFrom.CompareTo(finesInputViewModel.DateTime) <= 0 && a.PersonCars.Any(z => z.DateTo
+                             .CompareTo(finesInputViewModel.DateTime) >= 0))).FirstOrDefaultAsync();
+
+                    car.Fines?.Add(new Fine
+                    {
+                        Car = car,
+                        Driver = owner,
+                        DateTmeOfAccident = finesInputViewModel.DateTime,
+                        DriverId = owner.Id,
+                        CarId = car.Id,
+                        IsActive = true,
+                        Value = finesInputViewModel.Value,
+                        IsPersonal = false,
+                        Registrator = registrator,
+                        RegistratorId = registrator.Id
+                    });
+                    Database.Cars.Update(car);
+
+                }
+            }
+            await Database.SaveChangesAsync();
+            return new { IsSuccess = true };
+
+        }
+        public async Task<PersonDataOutput[]> GetPersonsData()
+        {
+            var people = await Database.People.Include(f => f.Fines).Include(p => p.PersonCars).ToListAsync();
+            var fines = await Database.Fines.Include(s => s.Car).Include(d => d.Driver).ToListAsync();
+
+            var cars = await Database.Cars.Include(a => a.PersonCars).Include(s => s.Fines).ToListAsync();
+            List<PersonDataOutput> personDataOutputs = new();
+            for (int i = 0; i < people.Count; i++)
+            {
+                var allFinesCount = 0;
+                var activeFinesCount = 0;
+
+                var finesPersonal = fines.Where(a => a.IsPersonal && a.DriverId == people[i].Id).ToList();
+                activeFinesCount += finesPersonal.Where(a => a.IsActive).Count();
+                allFinesCount += finesPersonal.Count;
+                var allCars = people[i].PersonCars.Count;
+
+                var activeCarsCount = people[i].PersonCars.Where(j => j.DateFrom.CompareTo(DateTime.Now) <= 0
+                     && j.DateTo.CompareTo(DateTime.Now) >= 0
+                ).ToList().Count;
+
+                for (int j = 0; j < people[i].PersonCars.Count; j++)
+                {
+
+                    var finesByOwner = fines.Where(s => s.DateTmeOfAccident.CompareTo(people[i].PersonCars.ElementAt(j).DateFrom) >= 0
+                            && s.DateTmeOfAccident.CompareTo(people[i].PersonCars.ElementAt(j).DateTo) <= 0
+
+                            && !s.IsPersonal
+                    ).ToList();
+
+                    allFinesCount += finesByOwner.Count;
+                    activeFinesCount += finesByOwner.Where(a => a.IsActive).Count();
 
 
+
+                }
+                PersonDataOutput personDataOutput = new()
+                {
+                    CarData = $"{activeCarsCount}/{allCars}",
+                    FineData = $"{activeFinesCount}/{allFinesCount}",
+                    City = people[i].City,
+                    Address = people[i].Address,
+                    Surname = people[i].Surname,
+                    Id = people[i].Id
+                };
+
+                personDataOutputs.Add(personDataOutput);
+            }
+            return personDataOutputs.ToArray();
+
+        }
+        public async Task<PersonCarFineDataOutput> GetPersonData(long id)
+        {
+            var person = await Database.People.Include(f => f.Fines).Include(p => p.PersonCars).FirstOrDefaultAsync(i => i.Id == id);
+            if (person != null)
+            {
+                var fines = await Database.Fines.Include(a => a.Car).Include(d => d.Driver).Where(w => w.DriverId == id).ToListAsync();
+                var personCars = await Database.PersonCars.Include(p => p.Car).Include(c => c.Person).Where(a => a.PersonId == person.Id).ToListAsync();
+
+                var activeCars = personCars.Where(a => a.DateFrom.CompareTo(DateTime.Now) <= 0 && a.DateTo.CompareTo(DateTime.Now) >= 0).ToList();
+                List<FineDataOutput> finesOutput = new List<FineDataOutput>();
+                List<CarDataOutput> carsOutput = new List<CarDataOutput>();
+                for(int i=0;i<fines.Count;i++)
+                {
+                    FineDataOutput fineDataOutput = new FineDataOutput
+                    {
+                        CarId = fines[i].CarId,
+                        IsActive = fines[i].IsActive,
+                        Number = fines[i].Car.Number,
+                        Value = fines[i].Value,
+                        Id=fines[i].Id
+
+                    };
+                    finesOutput.Add(fineDataOutput);
+
+                }
+                for (int i = 0; i < personCars.Count; i++)
+                {
+
+                    CarDataOutput carDataOutput = new CarDataOutput
+                    {
+                        BeginOwning = personCars[i].DateFrom,
+                        EndOwning = personCars[i].DateTo,
+                        Name = personCars[i].Car.Name,
+                        Number = personCars[i].Car.Number,
+                        Id=personCars[i].CarId
+                    };
+                    carsOutput.Add(carDataOutput);
+                }
+
+
+
+                PersonCarFineDataOutput personDataOutput = new PersonCarFineDataOutput
+                {
+                    City = person.City,
+                    Address = person.Address,
+                    Surname = person.Surname,
+                    Id = person.Id,
+                    CarData = carsOutput.ToArray(),
+                    FineDatas = finesOutput.ToArray()
+                };
+                return personDataOutput;
+            }
+            return null;
+        }
     }
 }

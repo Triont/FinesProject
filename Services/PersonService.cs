@@ -32,7 +32,8 @@ namespace Project5.Services
         }
         public async Task<IEnumerable<PersonDataOutput>> GetAllPerson()
         {
-            return await this.person.GetAllPersons();
+         return  await this.person.GetPersonsData();
+          //  return await this.person.GetAllPersons();
         }
 
         public async Task CreatePerson(Person person)
@@ -41,7 +42,8 @@ namespace Project5.Services
         }
         public async Task<PersonCarFineDataOutput>  Get(long id)
         {
-           return await this.person.GetPerson(id);
+         return   await this.person.GetPersonData(id);
+          // return await this.person.GetPerson(id);
         }
         public async Task Edit(Person person)
         {
@@ -68,6 +70,10 @@ namespace Project5.Services
         {
             await this.person.AddFine(id, fineInputData);
 
+        }
+        public async Task AddFine(long id, FinesInputViewModel finesInputViewModel)
+        {
+            await this.person.CreateFine(id, finesInputViewModel);
         }
         public async Task AddFine(long id, FineCarInputData fineCarInputData)
         {
