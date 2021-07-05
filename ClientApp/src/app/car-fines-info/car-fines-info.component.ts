@@ -1,33 +1,35 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
-import { Router} from '@angular/router'
+import { Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
-  selector: 'app-carsshow',
-  templateUrl: './cars-show.component.html'
+  selector: 'app-carsfinesinfo',
+  templateUrl: './car-fines-info.component.html'
 })
-export class CarGetComponent implements OnInit {
+export class CarGetInfoComponent implements OnInit {
   public personsData: PersonDataOutput[];
   public carsData: CarShowViewModel[];
   public lst: number[]  = new Array();
   public Checked: boolean[];
+  public info: FineByCarInfo[];
+  public id: number;
   //constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
   //    http.get<string[]>(baseUrl + 'api/Persons').subscribe(result => {
   //    this.forecasts = result;
   //  }, error => console.error(error));
-    //  }
-    constructor(private http: HttpService) {
+  //  }
+  constructor(private http: HttpService, public route: ActivatedRoute) {
 
     }
   ngOnInit() {
+    this.id = +this.route.snapshot.paramMap.get('id');
+    //this.http.getCarsDataFromServer().subscribe((data: CarShowViewModel[]) => this.carsData = data);
+    this.http.getInfoByCar(this.id).subscribe((data: FineByCarInfo[]) => this.info = data)
     
-    this.http.getCarsDataFromServer().subscribe((data: CarShowViewModel[]) => this.carsData = data);
-    setTimeout(() => {                           //<<<---using ()=> syntax
-    
-    }, 5000);
-    
-    console.log(this.carsData);
+    console.log(this.info);
     
       
      // this.Checked.length = this.personsData.length;
@@ -102,4 +104,12 @@ interface CarShowViewModel {
   number: string;
   ownerId: number;
   fines: string;
+}
+
+export class FineByCarInfo {
+  constructor(public id: number, public personId: number, public city: string, public value: number,
+    public dateTimeAccident: Date, public isActive: boolean
+  ) {
+
+  }
 }

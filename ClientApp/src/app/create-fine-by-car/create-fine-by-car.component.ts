@@ -30,7 +30,8 @@ export class CreateFineByCar implements OnInit {
   async Create() {
     // await this.http.postPerson(this.personData).subscribe((data: Person) => this.personData = data);
     //await this.http.addCarToPerson(this.carData, this.id).subscribe((data => this.http.getPersonsDataFromServer()));
-    await this.http.addFineToPerson(this.fineData, this.id).subscribe((data) => this.http.getPersonsDataFromServer());
+    // await this.http.addFineToPerson(this.fineData, this.id).subscribe((data) => this.http.getPersonsDataFromServer());
+    await this.http.createFineByCar(this.fine, this.id).subscribe(((data) => this.http.getPersonsDataFromServer()));
     location.pathname = '/';
 
   }

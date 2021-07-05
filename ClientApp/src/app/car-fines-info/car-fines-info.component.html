@@ -5,25 +5,26 @@
 <p *ngIf="!carsData"><em>Loading...</em></p>
 
 <button (click)="CreateNew()">New person</button>
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="carsData">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="info">
   <thead>
     <tr>
       <th>Id</th>
-      <th>Name</th>
-      <th>Number</th>
-      <th>Fines</th>
-    
-      <th>Action</th>
+      <th>Person id</th>
+      <th>City</th>
+      <th>Value</th>
+    <th>Date</th>
+      <th>Is active</th>
       
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let car of carsData">
-      <td>{{ car.id }}</td>
-      <td>{{ car.name }}</td>
-      <td>{{ car.number}}</td>
-      <td>{{ car.fines}}</td>
-     <td> <a href="/create-fine-by-car/{{car.id}}"></a></td>
+    <tr *ngFor="let fine of info">
+      <td>{{ fine.id }}</td>
+      <td>{{ fine.personId }}</td>
+      <td>{{ fine.city}}</td>
+      <td>{{ fine.value}}</td>
+      <td> {{fine.dateTimeAccident}}</td>
+      <td>{{fine.isActive}}</td>
 
 
     </tr>

@@ -17,6 +17,7 @@ import { FineCreateComponent } from './create-fine/create-fine.component';
 import { CarGetComponent } from './cars-show/cars-show.component';
 import { SearchComponent } from './search-result/search-result.component';
 import { CreateFineByCar } from './create-fine-by-car/create-fine-by-car.component'
+import { CarGetInfoComponent } from './car-fines-info/car-fines-info.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { CreateFineByCar } from './create-fine-by-car/create-fine-by-car.compone
     FineCreateComponent,
     CarGetComponent,
     SearchComponent,
-    CreateFineByCar
+    CreateFineByCar,
+    CarGetInfoComponent
    
     
 
@@ -50,8 +52,8 @@ import { CreateFineByCar } from './create-fine-by-car/create-fine-by-car.compone
       { path: 'create-fine/:id', component: FineCreateComponent },
       { path: 'cars', component: CarGetComponent },
       { path: 'search-result/:id', component: SearchComponent },
-      { path: 'create-fine-by-car/:id', component: CreateFineByCar }
-   
+      { path: 'create-fine-by-car/:id', component: CreateFineByCar },
+      { path: 'car-fines-info/:id', component: CarGetInfoComponent }
      
      
     

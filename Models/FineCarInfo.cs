@@ -17,9 +17,10 @@ namespace Project5.Models
     public class FineByCarInfo
     {
         public long Id { get; set; }
+        public long PersonId { get; set; }
         public string City { get; set; }
         public decimal Value { get; set; }
-        public DateTime DateTimeAccident { get; set; }
+        public DateTime DateTimeAccident { get; set; }      
         public bool IsActive { get; set; }
     }
 }

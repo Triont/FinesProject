@@ -63,21 +63,36 @@ namespace Project5.Models
                             GerNumber = fineCarInputData.NumberRegistrator
                         };
                     }
-                    currentOwner.Person.Fines?.Add(new Fine
-                    {
-                        DateTmeOfAccident=fineCarInputData.DateTime,
-                        Driver=currentOwner.Person,
-                        DriverId=currentOwner.PersonId,
-                        Car=car,
-                        CarId=car.Id,
-                        IsActive=true,
-                        IsPersonal=fineCarInputData.IsPersonal,
-                        Registrator=registrator,
+                    //currentOwner.Person.Fines?.Add(new Fine
+                    //{
+                    //    DateTmeOfAccident=fineCarInputData.DateTime,
+                    //    Driver=currentOwner.Person,
+                    //    DriverId=currentOwner.PersonId,
+                    //    Car=car,
+                    //    CarId=car.Id,
+                    //    IsActive=true,
+                    //    IsPersonal=fineCarInputData.IsPersonal,
+                    //    Registrator=registrator,
                         
-                        Value=fineCarInputData.Value
+                    //    Value=fineCarInputData.Value
+
+                    //});
+                    car.Fines?.Add(new Fine
+                    {
+                        DateTmeOfAccident = fineCarInputData.DateTime,
+                        Driver = currentOwner.Person,
+                        DriverId = currentOwner.PersonId,
+                        Car = car,
+                        CarId = car.Id,
+                        IsActive = true,
+                        IsPersonal = fineCarInputData.IsPersonal,
+                        Registrator = registrator,
+
+                        Value = fineCarInputData.Value
 
                     });
                     finesContext.PersonCars.Update(currentOwner);
+                    finesContext.Cars.Update(car);
                 }
 
             }
@@ -85,7 +100,7 @@ namespace Project5.Models
         }
         public async Task<FineByCarInfo[]> GetFineInfo(long id)
         {
-            var car = await finesContext.Cars.FirstOrDefaultAsync(i => i.Id == id);
+            var car = await finesContext.Cars.Include(a=>a.Fines).FirstOrDefaultAsync(i => i.Id == id);
             if(car!=null)
             {
                 var fines = car.Fines.ToList();
@@ -99,7 +114,8 @@ namespace Project5.Models
                         IsActive = fines[i].IsActive,
                         Value = fines[i].Value,
                         Id = fines[i].Id,
-                        City = city
+                        City = city,
+                        PersonId=fines[i].DriverId.Value
 
 
                     };

@@ -23,7 +23,11 @@
       <td>{{ car.name }}</td>
       <td>{{ car.number}}</td>
       <td>{{ car.fines}}</td>
-     <td> <a href="/create-fine-by-car/{{car.id}}"></a></td>
+      <td>
+        <a href="/create-fine-by-car/{{car.id}}">Add fine</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="/car-fines-info/{{car.id}}">Get info</a>
+      </td>
 
 
     </tr>
