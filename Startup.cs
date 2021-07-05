@@ -48,6 +48,9 @@ namespace Project5
             services.AddDbContext<ClassLibrary4.Model.Database_FinesContext>(options =>
          options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
             ServiceProvider serviceProvider = services.BuildServiceProvider();
+            services.AddDbContext<Database_FinesContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+          
             ClassLibrary4.Model.Database_FinesContext appDbContext = serviceProvider.GetService<ClassLibrary4.Model.Database_FinesContext>();
             
             services.RegisterYourLibrary(appDbContext);

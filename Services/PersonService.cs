@@ -34,6 +34,7 @@ namespace Project5.Services
         }
         public async Task<IEnumerable<PersonDataOutput>> GetAllPerson()
         {
+
          return  await this.person.GetPersonsData();
             //Repositories.Class1 class1 = Repositories.Class1();
             //var t=await class1.GetPersonsData();

@@ -15,9 +15,15 @@ namespace Project5.Services
         static Database_FinesContext Database_FinesContext { get; set; }
 
         public Database_FinesContext Database;
-        public PersonRepo(Database_FinesContext databaseFinesContext)
+        public ClassLibrary4.Model.Database_FinesContext libDatabase;
+        public ClassLibrary4.IUnitOfWork IUnit;
+        public PersonRepo(Database_FinesContext databaseFinesContext, ClassLibrary4.Model.Database_FinesContext database_FinesContext,
+            ClassLibrary4.IUnitOfWork unitOfWork
+            )
         {
             Database = databaseFinesContext;
+            this.libDatabase = database_FinesContext;
+            this.IUnit = unitOfWork;
         }
        
 
@@ -925,6 +931,15 @@ namespace Project5.Services
                 personDataOutputs.Add(personDataOutput);
             }
             return personDataOutputs.ToArray();
+
+        }
+        public async Task GetFromLib<T>() where T :ClassLibrary4.BaseEntity 
+        {
+            ClassLibrary4.Class1 class1 = new ClassLibrary4.Class1();
+            ClassLibrary4.PersonRepo personRepo = new ClassLibrary4.PersonRepo();
+           var _repos= IUnit.Repository<T>();
+            _repos
+
 
         }
         public async Task<PersonCarFineDataOutput> GetPersonData(long id)
