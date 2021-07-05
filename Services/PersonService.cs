@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Project5.Models;
 using Project5.Model;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Project5.Services
@@ -14,11 +15,12 @@ namespace Project5.Services
         public PersonService(PersonRepo person)
         {
             this.person = person;
+   
             
         }
         public IQueryable<Person> GetPersonRepo()
         {
-          
+            //ClassLibrary1.Repositories.Class1 class1 = new ClassLibrary1.Repositories.Class1();
             return person.People;
         }
         public  PersonRepo GetRepo()
@@ -33,11 +35,15 @@ namespace Project5.Services
         public async Task<IEnumerable<PersonDataOutput>> GetAllPerson()
         {
          return  await this.person.GetPersonsData();
-          //  return await this.person.GetAllPersons();
+            //Repositories.Class1 class1 = Repositories.Class1();
+            //var t=await class1.GetPersonsData();
+           // return t;
+            //  return await this.person.GetAllPersons();
         }
 
         public async Task CreatePerson(Person person)
         {
+            
             await this.person.CreatePerson(person);
         }
         public async Task<PersonCarFineDataOutput>  Get(long id)

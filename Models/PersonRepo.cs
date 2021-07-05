@@ -9,7 +9,7 @@ using Project5.Models;
 
 namespace Project5.Services
 {
-    public class PersonRepo
+    public class PersonRepo: IPersonRepo
     {
         public IQueryable<Person> People { get; set; } = Database_FinesContext?.People;
         static Database_FinesContext Database_FinesContext { get; set; }
@@ -19,6 +19,7 @@ namespace Project5.Services
         {
             Database = databaseFinesContext;
         }
+       
 
         public async Task<PersonCarFineDataOutput> GetPerson(long id)
         {
@@ -980,5 +981,13 @@ namespace Project5.Services
             }
             return null;
         }
+    }
+    public interface IPersonRepo
+    {
+         Task<PersonCarFineDataOutput> GetPersonData(long id);
+        Task<PersonDataOutput[]> GetPersonsData();
+
+        Task<object> CreateFine(long id, FinesInputViewModel finesInputViewModel);
+
     }
 }

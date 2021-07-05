@@ -11,6 +11,9 @@ using Project5.Controllers;
 using Project5.Model;
 using Microsoft.Extensions.Logging;
 using Project5.Models;
+using static ClassLibrary4.ServiceCollectionExtensions;
+using static ClassLibrary4.Model.Database_FinesContext;
+
 
 namespace Project5
 {
@@ -36,13 +39,19 @@ namespace Project5
             services.AddScoped<PersonService>();
             services.AddScoped<FineRepo>();
             services.AddScoped<FineService>();
+          
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddDbContext<Database_FinesContext>(options =>
-         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
+            services.AddDbContext<ClassLibrary4.Model.Database_FinesContext>(options =>
+         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
+            ClassLibrary4.Model.Database_FinesContext appDbContext = serviceProvider.GetService<ClassLibrary4.Model.Database_FinesContext>();
+            
+            services.RegisterYourLibrary(appDbContext);
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
