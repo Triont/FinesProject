@@ -87,6 +87,9 @@ export class HttpService {
   closeFine(id: number) {
     return this.http.put(this.baseUrl + 'api/fines/' + id, true);
   }
+  getPersonsDataByLib() {
+    return this.http.get(this.baseUrl + 'api/persons/GetFromLib');
+  }
   Search(data: Search) {
     return this.http.post(this.baseUrl + 'api/persons/search/', data);
   }

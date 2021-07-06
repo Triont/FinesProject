@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using Project5.Models;
 using System.Threading.Tasks;
 using Project5.Services;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,46 +20,41 @@ namespace Project5.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly PersonService personService;
-        public PersonsController( PersonService personService)
+      private readonly IPersonService person;
+       private readonly ServicesLibs.IPersonService personService1;
+        private readonly IMapper mapper;
+        public PersonsController( PersonService personService,
+                                 IPersonService service,ServicesLibs.IPersonService personService1, 
+            
+            IMapper mapper)
         {
             
-            this.personService = personService;
+           this.personService = personService;
+        this.person = service;
+           this.personService1 = personService1;
+            this.mapper = mapper;
         }
         // GET: api/<PersonsController>
         [HttpGet]
         public async Task< PersonDataOutput[]> Get()
         {
-            //if ((await database_FinesContext.People.ToListAsync()).Count == 2)
-            //{
-            //    WriteData();
-            //}
-
-            //var people=await database_FinesContext.People.ToListAsync();
-
-
+       
+            var serviceResWithFines = await person.GetAllPerson();
          
-            //    await      personService.CreatePerson(new Person()
-            //{
-
-            //    Surname="NewName", Address="Some street", City="Kha", Id=3, PersonCars=new List<PersonCar>() { new PersonCar() { Car=new Car() { Name="Ford",
-            //    Number="13ffa3" }
-            //    } }
-            //});
-            
-           //    var serviceResultNew = await personService.GetAll();
-            var serviceResWithFines = await personService.GetAllPerson();
-            //var r = serviceResWithFines.ToList();
-
-
-            //   var result= database_FinesContext.People.FromSqlRaw("SELECT * from Person");
-            // var results = database_FinesContext.People.FromSqlRaw("SELECT *, (Select * from PersonCars Where PersonCars.PersonId=Person.Id ).Count() from Person    ");
-            //  var r =await result.ToListAsync();
-
-            // var nnn = await results.ToListAsync();
-            //   return serviceResultNew.ToArray();
             return serviceResWithFines.ToArray();
-          //  return r.ToArray();
-      //      return new string[] { "value1", "value2" };
+ 
+        }
+
+        [HttpGet("GetFromLib")]
+        public async Task<PersonDataOutput[]> GetFromLib()
+        {
+            var result = await personService1.GetPersonDataOutputs();
+            List<PersonDataOutput> personDataOutputs = new List<PersonDataOutput>();
+            for (int i = 0; i < result.Length; i++)
+            {
+                personDataOutputs.Add(mapper.Map<PersonDataOutput>(result[i]));
+            }
+            return personDataOutputs.ToArray();
         }
 
 

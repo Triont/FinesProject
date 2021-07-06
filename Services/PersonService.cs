@@ -9,17 +9,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Project5.Services
 {
-    public class PersonService
+    public class PersonService:IPersonService
     {
          readonly PersonRepo person;
-        public PersonService(PersonRepo person)
+        private readonly IPersonRepo personRepo;
+        public PersonService(IPersonRepo personRepo, PersonRepo person)
         {
-            this.person = person;
+             this.person = person;
+            this.personRepo = personRepo;
    
             
         }
         public IQueryable<Person> GetPersonRepo()
         {
+            
             //ClassLibrary1.Repositories.Class1 class1 = new ClassLibrary1.Repositories.Class1();
             return person.People;
         }
@@ -34,8 +37,11 @@ namespace Project5.Services
         }
         public async Task<IEnumerable<PersonDataOutput>> GetAllPerson()
         {
-
-         return  await this.person.GetPersonsData();
+            return await this.person.GetPersonsDataFromLibrary();
+           // return  await this.person.GetPersonsData();
+          //  return await this.person.GetFromLibrary();
+            
+            
             //Repositories.Class1 class1 = Repositories.Class1();
             //var t=await class1.GetPersonsData();
            // return t;
@@ -65,7 +71,7 @@ namespace Project5.Services
             await this.person.DeletePerson(person);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(long id)
         {
             await this.person.DeletePerson(id);
         }
@@ -99,5 +105,15 @@ namespace Project5.Services
         }
 
        
+    }
+
+    public interface IPersonService
+    {
+        Task AddFine(long id, FinesInputViewModel finesInputViewModel);
+        Task AddCar(long id, CarDataInput carDataInput);
+        Task Delete(long id);
+        Task Edit(Person person);
+        Task<PersonCarFineDataOutput> Get(long id);
+        Task<IEnumerable<PersonDataOutput>> GetAllPerson();
     }
 }

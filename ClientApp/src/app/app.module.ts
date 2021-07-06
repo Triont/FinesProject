@@ -18,6 +18,7 @@ import { CarGetComponent } from './cars-show/cars-show.component';
 import { SearchComponent } from './search-result/search-result.component';
 import { CreateFineByCar } from './create-fine-by-car/create-fine-by-car.component'
 import { CarGetInfoComponent } from './car-fines-info/car-fines-info.component';
+import { FetchDataLibComponent } from './fetch-data-lib/fetch-data-lib.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { CarGetInfoComponent } from './car-fines-info/car-fines-info.component';
     CarGetComponent,
     SearchComponent,
     CreateFineByCar,
-    CarGetInfoComponent
+    CarGetInfoComponent,
+    FetchDataLibComponent
    
     
 
@@ -53,7 +55,8 @@ import { CarGetInfoComponent } from './car-fines-info/car-fines-info.component';
       { path: 'cars', component: CarGetComponent },
       { path: 'search-result/:id', component: SearchComponent },
       { path: 'create-fine-by-car/:id', component: CreateFineByCar },
-      { path: 'car-fines-info/:id', component: CarGetInfoComponent }
+      { path: 'car-fines-info/:id', component: CarGetInfoComponent },
+      { path: 'fetch-data-lib', component: FetchDataLibComponent }
      
      
     

@@ -23,14 +23,16 @@ namespace Project5.Controllers
     
 
         private readonly PersonService personService;
+        private readonly IPersonService person;
         private readonly CarService carService;
         private Logger<CarsController> logger;
-        public CarsController( PersonService personService, Logger<CarsController> logger, CarService carService)
+        public CarsController( PersonService personService, Logger<CarsController> logger, CarService carService, IPersonService service)
         {
           
             this.personService = personService;
             this.logger = logger;
             this.carService = carService;
+            this.person = service;
             this.logger.LogInformation("In constructor");
         }
         // GET: api/<CarsController>

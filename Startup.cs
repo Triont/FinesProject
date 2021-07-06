@@ -11,9 +11,10 @@ using Project5.Controllers;
 using Project5.Model;
 using Microsoft.Extensions.Logging;
 using Project5.Models;
+using Project5.Mapping;
 using static ClassLibrary4.ServiceCollectionExtensions;
 using static ClassLibrary4.Model.Database_FinesContext;
-
+using AutoMapper;
 
 namespace Project5
 {
@@ -33,9 +34,15 @@ namespace Project5
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
             services.AddScoped<Logger<CarsController>>();
+            services.AddScoped<IPersonRepo, PersonRepo>();
             services.AddScoped<PersonRepo>();
+
+            services.AddScoped<ClassLibrary4.IUnitOfWork, ClassLibrary4.UnitOfWork>();
+            services.AddScoped<ServicesLibs.IPersonService, ServicesLibs.PersonService>();
+
             services.AddScoped<CarRepo>();
             services.AddScoped<CarService>();
+            services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<PersonService>();
             services.AddScoped<FineRepo>();
             services.AddScoped<FineService>();
@@ -54,7 +61,16 @@ namespace Project5
             ClassLibrary4.Model.Database_FinesContext appDbContext = serviceProvider.GetService<ClassLibrary4.Model.Database_FinesContext>();
             
             services.RegisterYourLibrary(appDbContext);
-         
+
+            // Auto Mapper Configurations
+     var mapperConfig = new MapperConfiguration(mc =>
+     {
+         mc.AddProfile(new MappingDatas());
+     });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

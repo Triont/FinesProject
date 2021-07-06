@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Project5.Model;
 using Microsoft.EntityFrameworkCore;
 using Project5.Models;
-
+using AutoMapper;
 
 namespace Project5.Services
 {
@@ -17,16 +17,45 @@ namespace Project5.Services
         public Database_FinesContext Database;
         public ClassLibrary4.Model.Database_FinesContext libDatabase;
         public ClassLibrary4.IUnitOfWork IUnit;
+        private readonly IMapper _mapper;
         public PersonRepo(Database_FinesContext databaseFinesContext, ClassLibrary4.Model.Database_FinesContext database_FinesContext,
-            ClassLibrary4.IUnitOfWork unitOfWork
+            ClassLibrary4.IUnitOfWork unitOfWork, IMapper mapper
             )
         {
             Database = databaseFinesContext;
             this.libDatabase = database_FinesContext;
             this.IUnit = unitOfWork;
+            this._mapper = mapper;
         }
        
+        public async Task<List<Person>> GetFromLibrary()
+        {
 
+
+            var tempdata=await IUnit.GetAll();
+            List<Person> people = new List<Person>();
+            for(int i=0;i<tempdata.Count;i++)
+            {
+               var mappedData= _mapper.Map<ClassLibrary4.Model.Person, Person>(tempdata[i]);
+                people.Add(mappedData);
+
+            }
+            return people;
+            
+        }
+        public async Task<PersonDataOutput[]> GetPersonsDataFromLibrary()
+        {
+            var r = await IUnit.GetPersonsInfo();
+            List<PersonDataOutput> personDataOutputs = new List<PersonDataOutput>();
+            for(int i=0; i<r.Length;i++)
+            {
+              var temp=  _mapper.Map<ClassLibrary4.Model.PersonDataOutput, PersonDataOutput>(r.ElementAt(i));
+                personDataOutputs.Add(temp);
+            }
+            return personDataOutputs.ToArray();
+          
+
+        }
         public async Task<PersonCarFineDataOutput> GetPerson(long id)
         {
             var r = await Database.People.Include(a => a.PersonCars).ThenInclude(f => f.Car).FirstOrDefaultAsync(i => i.Id == id);
@@ -35,7 +64,7 @@ namespace Project5.Services
             var fines = new List<Fine>();
             var _cars = await Database.Cars.ToListAsync();
             var nFines = await Database.Fines.ToListAsync();
-
+        
             for (int i = 0; i < r.PersonCars.Count; i++)
             {
                 cars.AddRange(await Database.Cars.Where(q => q.Id == r.PersonCars.ElementAt(i).CarId).ToListAsync());
@@ -103,7 +132,7 @@ namespace Project5.Services
             await Database.SaveChangesAsync();
         }
 
-        public async Task DeletePerson(int id)
+        public async Task DeletePerson(long id)
         {
             var toDelete = await Database.People.FirstOrDefaultAsync(i => i.Id == id);
             Database.People.Remove(toDelete);
@@ -938,7 +967,9 @@ namespace Project5.Services
             ClassLibrary4.Class1 class1 = new ClassLibrary4.Class1();
             ClassLibrary4.PersonRepo personRepo = new ClassLibrary4.PersonRepo();
            var _repos= IUnit.Repository<T>();
-            _repos
+            ClassLibrary4.BaseEntity baseEntity = new ClassLibrary4.BaseEntity();
+         //   ClassLibrary4.UnitOfWork unitOfWork = new ClassLibrary4.UnitOfWork();
+          // ClassLibrary4.Repository
 
 
         }
